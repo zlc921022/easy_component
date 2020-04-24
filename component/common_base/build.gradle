@@ -1,0 +1,19 @@
+apply from: "../../common_component.gradle"
+// 扩展库
+def supportDependencies = rootProject.ext.supportDependencies
+// 第三库
+def thirdDependencies = rootProject.ext.thirdDependencies
+
+//依赖库
+dependencies {
+
+    api project(':component:common_resource')
+    api supportDependencies.multidex
+
+    //其他工具库
+    api thirdDependencies.statusbarutil
+    api thirdDependencies.glide
+    api thirdDependencies.materialDialogs
+    api thirdDependencies.arouter
+    api thirdDependencies.timber
+}

@@ -1,0 +1,15 @@
+apply from: "../../common_component.gradle"
+// 扩展库
+def thirdDependencies = rootProject.ext.thirdDependencies
+def supportDependencies = rootProject.ext.supportDependencies
+
+dependencies {
+    // 基础ui
+    api supportDependencies.supportAppcompat
+    api supportDependencies.recyclerView
+    api supportDependencies.suppoutDesign
+    api supportDependencies.supportAnnotations
+    api supportDependencies.constraintLayout
+    // 屏幕适配
+    api thirdDependencies.autoSize
+}

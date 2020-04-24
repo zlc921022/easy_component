@@ -1,0 +1,13 @@
+apply from: "../../common_component.gradle"
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+// 扩展库
+def thirdDependencies = rootProject.ext.thirdDependencies
+def supportDependencies = rootProject.ext.supportDependencies
+
+dependencies {
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api thirdDependencies.fastble
+    implementation supportDependencies.supportAnnotations
+    implementation thirdDependencies.timber
+}

@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.xiaochen.module.router1">
+
+    <application>
+        <activity android:name="com.xiaochen.module.router1.Router1MainActivity" />
+    </application>
+</manifest>

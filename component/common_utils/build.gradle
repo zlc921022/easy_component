@@ -1,0 +1,10 @@
+apply from: "../../common_component.gradle"
+// 扩展库
+def supportDependencies = rootProject.ext.supportDependencies
+// 第三库
+def thirdDependencies = rootProject.ext.thirdDependencies
+dependencies {
+    api supportDependencies.supportAnnotations
+    api thirdDependencies.timber
+    api thirdDependencies.gson
+}

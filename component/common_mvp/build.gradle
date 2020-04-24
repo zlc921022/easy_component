@@ -1,0 +1,15 @@
+apply from: "../../common_component.gradle"// 第三库
+def supportDependencies = rootProject.ext.supportDependencies
+def thirdDependencies = rootProject.ext.thirdDependencies
+
+dependencies {
+    api project(':component:common_data')
+    api supportDependencies.supportAppcompat
+    api thirdDependencies.statusbarutil
+    api thirdDependencies.rxJava
+    api (thirdDependencies.rxJavaAdapter){
+        exclude group : 'io.reactivex.rxjava2'
+    }
+    api thirdDependencies.rxAndroid
+    api thirdDependencies.lifecycle
+}

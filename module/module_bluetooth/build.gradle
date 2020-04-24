@@ -1,0 +1,16 @@
+apply from: "../../common_module.gradle"
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+def thirdDependencies = rootProject.ext.thirdDependencies
+
+dependencies {
+    implementation project(':component:common_base')
+    implementation project(':component:common_utils')
+    implementation project(':component:common_bluetooth')
+    implementation project(':component:common_sdk')
+
+    implementation thirdDependencies.eventbus
+    kapt thirdDependencies.arouterCompiler
+}

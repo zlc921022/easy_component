@@ -1,0 +1,21 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.xiaochen.module.router2">
+
+    <application>
+        <activity android:name="com.xiaochen.module.router2.MainActivity2" />
+        <activity android:name="com.xiaochen.module.router2.MainActivity3" />
+        <activity android:name="com.xiaochen.module.router2.UrlTestActivity" />
+        <activity android:name=".UrlSchemeActivity">
+            <intent-filter>
+                <data
+                    android:host="m.github.com"
+                    android:scheme="xiaochen" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

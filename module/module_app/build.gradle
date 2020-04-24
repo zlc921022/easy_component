@@ -1,0 +1,10 @@
+apply from: "../../common_module.gradle"
+android {
+    resourcePrefix "app_" //给 Module 内的资源名增加前缀, 避免资源名冲突
+}
+
+dependencies {
+    implementation project(':component:common_base')
+    implementation project(':component:common_resource')
+    implementation project(':component:common_sdk')
+}

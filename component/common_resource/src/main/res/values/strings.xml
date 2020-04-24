@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--组件壳命名-->
+    <string name="app_name">easy_component</string>
+    <string name="app_aop">app-aop</string>
+    <string name="app_router">app-router</string>
+    <string name="app_ble">app-bluetooth</string>
+    <string name="app_jetpack">app-jetpack</string>
+    <string name="aop_widget">app-widget</string>
+    <string name="aop_mvvm">app-mvvm</string>
+
+</resources>

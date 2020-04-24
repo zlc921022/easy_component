@@ -1,0 +1,25 @@
+apply from: "../../common_module.gradle"
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+def thirdDependencies = rootProject.ext.thirdDependencies
+
+android {
+    defaultConfig {
+        multiDexEnabled = true
+    }
+    resourcePrefix "mvvm_" //给 Module 内的资源名增加前缀, 避免资源名冲突
+}
+
+dependencies {
+    implementation project(':component:common_utils')
+    implementation project(':component:common_mvvm')
+    implementation project(':component:common_base')
+    implementation project(':component:common_sdk')
+
+    implementation thirdDependencies.butterknife
+    annotationProcessor thirdDependencies.butterKnifeCompiler
+
+    kapt thirdDependencies.arouterCompiler
+}
+

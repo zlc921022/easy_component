@@ -1,0 +1,18 @@
+apply from: "../../common_component.gradle"
+
+// 第三库
+def thirdDependencies = rootProject.ext.thirdDependencies
+
+dependencies {
+    //网络请求
+    api thirdDependencies.retrofit
+    api thirdDependencies.gson
+    api (thirdDependencies.retrofitConverterGson){
+        exclude group : 'com.google.code.gson'
+        exclude group : 'com.squareup.retrofit2'
+    }
+    api (thirdDependencies.okhttpLoggingInterceptor){
+        exclude group : 'com.squareup.okhttp3'
+    }
+    api thirdDependencies.timber
+}

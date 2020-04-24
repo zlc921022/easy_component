@@ -1,0 +1,5 @@
+apply from: "../../common_component.gradle"
+def thirdDependencies = rootProject.ext.thirdDependencies
+dependencies {
+    api thirdDependencies.arouter
+}

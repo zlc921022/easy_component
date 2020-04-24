@@ -1,0 +1,32 @@
+// app宿主壳
+include ':app'
+// app组件壳
+include ':app_shell:app_aop'
+include ':app_shell:app_bluetooth'
+include ':app_shell:app_jetpack'
+include ':app_shell:app_arouter'
+include ':app_shell:app_widget'
+include ':app_shell:app_mvp'
+
+// 通用组件
+include ':component:common_base'
+include ':component:common_data'
+include ':component:common_resource'
+include ':component:common_sdk'
+include ':component:common_utils'
+include ':component:common_widget'
+include ':component:common_bluetooth'
+include ':component:common_mvp'
+include ':component:common_mvvm'
+include ':component:common_service'
+
+// app业务模块
+include ':module:module_aop'
+include ':module:module_widget'
+include ':module:module_jetpack'
+include ':module:module_bluetooth'
+include ':module:module_router1'
+include ':module:module_mvp'
+include ':module:module_mvvm'
+include ':module:module_router2'
+include ':module:module_app'

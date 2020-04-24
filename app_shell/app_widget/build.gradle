@@ -1,0 +1,7 @@
+apply from: "../../common_shell.gradle"
+
+dependencies {
+    implementation project(':component:common_resource')
+    implementation project(':component:common_base')
+    runtimeOnly project(':module:module_widget')
+}

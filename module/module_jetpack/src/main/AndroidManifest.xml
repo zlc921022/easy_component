@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.xiaochen.module.jetpack">
+
+    <application>
+        <activity android:name=".MainActivity"/>
+        <activity android:name=".LifeCyclerActivity" />
+        <activity android:name=".RoomActivity" />
+        <activity android:name=".ConstraintLayoutActivity" />
+        <activity android:name=".PagingActivity" />
+        <activity
+            android:name=".NavigationActivity"
+            android:theme="@style/AppTheme" />
+    </application>
+
+</manifest>

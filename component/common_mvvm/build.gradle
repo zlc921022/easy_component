@@ -1,0 +1,14 @@
+apply from: "../../common_component.gradle"
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+dependencies {
+
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    api project(':component:common_data')
+
+    api thirdDependencies.lifecycle
+    api thirdDependencies.livedata
+    api thirdDependencies.viewmodel
+    api thirdDependencies.viewModelKtx
+}

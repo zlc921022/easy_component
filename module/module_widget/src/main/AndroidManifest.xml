@@ -1,0 +1,6 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.xiaochen.module.widget" >
+    <application>
+        <activity android:name="com.xiaochen.module.widget.ui.WidgetActivity" />
+    </application>
+</manifest>

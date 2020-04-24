@@ -1,0 +1,24 @@
+apply from: "../../common_module.gradle"
+def thirdDependencies = rootProject.ext.thirdDependencies
+
+android {
+    resourcePrefix "jetpack_" //给 Module 内的资源名增加前缀, 避免资源名冲突
+}
+
+dependencies {
+    implementation project(':component:common_sdk')
+    implementation project(':component:common_base')
+
+    implementation thirdDependencies.rxAndroid
+    implementation thirdDependencies.lifecycle
+    implementation thirdDependencies.viewmodel
+    implementation thirdDependencies.livedata
+
+    implementation 'androidx.paging:paging-runtime:2.1.2'
+    implementation 'androidx.paging:paging-rxjava2:2.1.2'
+    implementation 'androidx.room:room-runtime:2.2.5'
+    annotationProcessor 'androidx.room:room-compiler:2.2.5'
+    implementation "androidx.navigation:navigation-fragment-ktx:2.2.2"
+    implementation "androidx.navigation:navigation-ui-ktx:2.2.2"
+
+}
