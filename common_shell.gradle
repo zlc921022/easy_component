@@ -62,6 +62,6 @@ android {
 }
 
 dependencies {
-    implementation project(":component:common_sdk")
+//    implementation project(":component:common_sdk")
     annotationProcessor thirdDependencies.arouterCompiler
 }

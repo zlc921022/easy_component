@@ -13,10 +13,10 @@ import com.clj.fastble.data.BleDevice
  * @author     zhenglecheng
  * @date       2020/4/3
  */
-class MyBluetoothGattCallback(listener: BleGattCallBackListener) :
-    BluetoothGattCallback() {
+class MyBluetoothGattCallback :
+        BluetoothGattCallback() {
 
-    private val mCallbackListener = listener
+    var mCallbackListener: BleGattCallBackListener? = null
     private val mHandler by lazy {
         Handler(Looper.getMainLooper())
     }
@@ -32,7 +32,7 @@ class MyBluetoothGattCallback(listener: BleGattCallBackListener) :
             }
             BluetoothGatt.STATE_DISCONNECTED -> {
                 runOnUiThread {
-                    mCallbackListener.onBleDisconnect(gatt.device)
+                    mCallbackListener?.onBleDisconnect(gatt.device)
                 }
             }
         }
@@ -41,34 +41,34 @@ class MyBluetoothGattCallback(listener: BleGattCallBackListener) :
     //服务发现回调
     override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
         runOnUiThread {
-            mCallbackListener.onBleConnect(BleDevice(gatt.device), isGattSuccess(status))
+            mCallbackListener?.onBleConnect(BleDevice(gatt.device), isGattSuccess(status))
         }
     }
 
     //数据改变回调
     override fun onCharacteristicChanged(
-        gatt: BluetoothGatt,
-        characteristic: BluetoothGattCharacteristic?
+            gatt: BluetoothGatt,
+            characteristic: BluetoothGattCharacteristic?
     ) {
         characteristic?.run {
             runOnUiThread {
-                mCallbackListener.onBleDataChanged(this.value)
+                mCallbackListener?.onBleDataChanged(this.value)
             }
         }
     }
 
     //读取数据回调
     override fun onCharacteristicRead(
-        gatt: BluetoothGatt,
-        characteristic: BluetoothGattCharacteristic?,
-        status: Int
+            gatt: BluetoothGatt,
+            characteristic: BluetoothGattCharacteristic?,
+            status: Int
     ) {
         characteristic?.run {
             runOnUiThread {
-                mCallbackListener.onBleReadAndWrite(
-                    "read",
-                    this.value,
-                    isGattSuccess(status)
+                mCallbackListener?.onBleReadAndWrite(
+                        "read",
+                        this.value,
+                        isGattSuccess(status)
                 )
             }
         }
@@ -76,16 +76,16 @@ class MyBluetoothGattCallback(listener: BleGattCallBackListener) :
 
     //写入数据回调
     override fun onCharacteristicWrite(
-        gatt: BluetoothGatt,
-        characteristic: BluetoothGattCharacteristic?,
-        status: Int
+            gatt: BluetoothGatt,
+            characteristic: BluetoothGattCharacteristic?,
+            status: Int
     ) {
         characteristic?.run {
             runOnUiThread {
-                mCallbackListener.onBleReadAndWrite(
-                    "write",
-                    this.value,
-                    isGattSuccess(status)
+                mCallbackListener?.onBleReadAndWrite(
+                        "write",
+                        this.value,
+                        isGattSuccess(status)
                 )
             }
         }
@@ -93,21 +93,21 @@ class MyBluetoothGattCallback(listener: BleGattCallBackListener) :
 
     //通知描述符读取回调
     override fun onDescriptorRead(
-        gatt: BluetoothGatt,
-        descriptor: BluetoothGattDescriptor,
-        status: Int
+            gatt: BluetoothGatt,
+            descriptor: BluetoothGattDescriptor,
+            status: Int
     ) {
 
     }
 
     //通知描述符写入回调
     override fun onDescriptorWrite(
-        gatt: BluetoothGatt,
-        descriptor: BluetoothGattDescriptor,
-        status: Int
+            gatt: BluetoothGatt,
+            descriptor: BluetoothGattDescriptor,
+            status: Int
     ) {
         runOnUiThread {
-            mCallbackListener.onBleNotification(isGattSuccess(status))
+            mCallbackListener?.onBleNotification(isGattSuccess(status))
         }
     }
 
@@ -125,5 +125,12 @@ class MyBluetoothGattCallback(listener: BleGattCallBackListener) :
         mHandler.post {
             block()
         }
+    }
+
+    /**
+     * 移除回调监听
+     */
+    fun removeCallBackListener() {
+        mCallbackListener = null
     }
 }

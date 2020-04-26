@@ -158,7 +158,7 @@ public class BleServiceManager {
     /**
      * 销毁服务
      */
-    public void onDestory() {
+    public void onDestroy() {
         if (onBleServiceListener != null) {
             onBleServiceListener = null;
         }

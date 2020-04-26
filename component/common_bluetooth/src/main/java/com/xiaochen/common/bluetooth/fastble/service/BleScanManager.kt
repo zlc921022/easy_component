@@ -9,9 +9,11 @@ import android.bluetooth.le.ScanSettings
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.text.TextUtils
 import androidx.annotation.RequiresApi
 import com.clj.fastble.data.BleDevice
 import java.util.*
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * <p>蓝牙扫描帮助类{d}</p>
@@ -40,7 +42,7 @@ object BleScanManager {
     /**
      * 扫描判断
      */
-    private var mIsScanning: Boolean = true
+    val mIsScanning = AtomicBoolean(true)
     /**
      * 扫描设备名称
      */
@@ -52,9 +54,9 @@ object BleScanManager {
     private val mScanSettings: ScanSettings? by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val builder = ScanSettings.Builder()
-                //SCAN_MODE_LOW_LATENCY 高功耗模式
-                // SCAN_MODE_LOW_POWER 低功耗模式 默认
-                .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
+                    //SCAN_MODE_LOW_LATENCY 高功耗模式
+                    // SCAN_MODE_LOW_POWER 低功耗模式 默认
+                    .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 builder.setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
                 builder.setMatchMode(ScanSettings.MATCH_MODE_STICKY)
@@ -73,13 +75,13 @@ object BleScanManager {
      * @param scanTime 扫描时间
      */
     fun startScan(
-        bluetoothAdapter: BluetoothAdapter, deviceName: String,
-        scanTime: Long
+            bluetoothAdapter: BluetoothAdapter, deviceName: String,
+            scanTime: Long
     ) {
         //超出扫描时间则停止扫描
         this.mDeviceName = deviceName
         this.bluetoothAdapter = bluetoothAdapter
-        mIsScanning = true
+        mIsScanning.set(true)
         mMainHandler.postDelayed(mScanRunnable, scanTime)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             bluetoothAdapter.startLeScan(mLeScanCallback)
@@ -92,7 +94,7 @@ object BleScanManager {
      * 停止扫描
      */
     fun stopScan() {
-        mIsScanning = false
+        mIsScanning.set(false)
         mMainHandler.removeCallbacks(mScanRunnable)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             bluetoothAdapter?.stopLeScan(mLeScanCallback)
@@ -105,48 +107,57 @@ object BleScanManager {
      * 蓝牙扫描回调 5.0 以下
      */
     private val mLeScanCallback =
-        LeScanCallback { device, rssi, scanRecord ->
-            // 确保在主线程
-            mMainHandler.post(Runnable {
-                if (device != null && mDeviceName != null && mDeviceName.equals(
-                        device.name,
-                        ignoreCase = true
-                    )
-                ) {
-                    scanAddDevice(device)
+            LeScanCallback { device, _, _ ->
+                // 确保在主线程
+                mMainHandler.post {
+                    if (TextUtils.isEmpty(mDeviceName)) {
+                        stopScan()
+                    } else if (!isEmptyDevice(device) && device.name.startsWith(
+                                    mDeviceName!!
+                            )
+                    ) {
+                        scanAddDevice(device)
+                    }
                 }
-            })
-        }
+            }
 
     /**
      * 蓝牙扫描回调 5.0 以上
      */
     private val mScanCallBack: ScanCallback =
-        @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-        object : ScanCallback() {
-            override fun onScanResult(
-                callbackType: Int,
-                result: ScanResult
-            ) {
-                super.onScanResult(callbackType, result)
-                // 确保在主线程
-                mMainHandler.post(Runnable {
-                    if (mDeviceName != null && mDeviceName.equals(
-                            result.device.name,
-                            ignoreCase = true
-                        )
-                    ) {
-                        scanAddDevice(result.device)
+            @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+            object : ScanCallback() {
+                override fun onScanResult(
+                        callbackType: Int,
+                        result: ScanResult
+                ) {
+                    super.onScanResult(callbackType, result)
+                    // 确保在主线程
+                    mMainHandler.post {
+                        if (mDeviceName == null) {
+                            stopScan()
+                        } else if (!isEmptyDevice(result.device) && result.device.name.startsWith(
+                                        mDeviceName!!
+                                )
+                        ) {
+                            scanAddDevice(result.device)
+                        }
                     }
-                })
+                }
             }
-        }
+
+    /**
+     * 判断设备是否为空
+     */
+    fun isEmptyDevice(device: BluetoothDevice?): Boolean {
+        return device == null || device.name == null
+    }
 
     /**
      * 扫描添加设备
      */
     private fun scanAddDevice(device: BluetoothDevice) {
-        if (mIsScanning) {
+        if (mIsScanning.get()) {
             val bleDevice = BleDevice(device)
             mScannedDevices.add(bleDevice)
             onBleScanCallBack?.onBleScan(bleDevice, true)
@@ -157,7 +168,7 @@ object BleScanManager {
      * 扫描的runnable
      */
     private val mScanRunnable = Runnable {
-        if (mIsScanning) {
+        if (mIsScanning.get()) {
             stopScan()
             if (mScannedDevices.isEmpty()) {
                 onBleScanCallBack?.onBleScanFinished(null)

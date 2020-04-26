@@ -7,22 +7,22 @@ package com.xiaochen.common.bluetooth.fastble.constant;
  */
 class CmdConstants {
     companion object {
-        private const val start = "zktt"
+        private const val start = ""
         // 0001-9999 设备号设置
-        const val num_cmd = "$start+NAME"
+        const val num_cmd = ""
         // 0 从机模式 （音频连接手机） 1 主机模式 音频连接蓝牙耳机
-        const val mode_cmd = "$start+ROLE"
+        const val mode_cmd = ""
         // 心音模式
-        const val heart_cmd = "$start+HEART"
+        const val heart_cmd = ""
         // 肺音模式
-        const val lung_cmd = "$start+LUNG"
+        const val lung_cmd = ""
         // 一般模式
-        const val common_cmd = "$start+ALL"
+        const val common_cmd = ""
         // 音频模式查询
-        const val search_cmd = "$start+QMODE"
+        const val search_cmd = ""
         // 声音加
-        const val voice_add_cmd = "$start+VOLU"
+        const val voice_add_cmd = ""
         // 声音减
-        const val voice_sub_cmd = "$start+VOLD"
+        const val voice_sub_cmd = ""
     }
 }

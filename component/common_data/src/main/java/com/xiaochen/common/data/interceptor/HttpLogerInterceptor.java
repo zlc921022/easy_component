@@ -19,6 +19,7 @@ import okhttp3.internal.http.HttpHeaders;
 import okhttp3.internal.platform.Platform;
 import okio.Buffer;
 import okio.BufferedSource;
+import timber.log.Timber;
 
 import static okhttp3.internal.platform.Platform.INFO;
 
@@ -47,7 +48,7 @@ public final class HttpLogerInterceptor implements Interceptor {
         HttpLogerInterceptor.Logger DEFAULT = new HttpLogerInterceptor.Logger() {
             @Override
             public void log(String message) {
-                Platform.get().log(INFO, message, null);
+                Timber.log(INFO, message);
             }
         };
     }

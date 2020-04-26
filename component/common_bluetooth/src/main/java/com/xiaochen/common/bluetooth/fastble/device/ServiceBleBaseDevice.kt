@@ -57,6 +57,14 @@ object ServiceBleBaseDevice {
     }
 
     /**
+     * 移除蓝牙服务回调
+     * 必须设置
+     */
+    fun removeBleCallBack(bleCallBack: BleGattCallBackListener) {
+        mService?.removeBleGattCallBack(bleCallBack)
+    }
+
+    /**
      * 获取蓝牙适配器
      */
     fun getBluetoothAdapter(): BluetoothAdapter? {
@@ -89,6 +97,13 @@ object ServiceBleBaseDevice {
      */
     fun enableBluetooth() {
         mService?.enableBluetooth()
+    }
+
+    /**
+     * 关闭蓝牙
+     */
+    fun disableBluetooth() {
+        mService?.disableBluetooth()
     }
 
     /**

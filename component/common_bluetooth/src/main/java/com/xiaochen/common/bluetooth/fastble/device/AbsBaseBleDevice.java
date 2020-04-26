@@ -9,10 +9,10 @@ import androidx.annotation.NonNull;
 
 import com.clj.fastble.data.BleDevice;
 import com.xiaochen.common.bluetooth.fastble.constant.DeviceConstants;
-import com.xiaochen.common.bluetooth.utils.LogUtil;
-import com.xiaochen.common.bluetooth.fastble.service.BleServiceManager;
 import com.xiaochen.common.bluetooth.fastble.service.BleGattCallBackListener;
+import com.xiaochen.common.bluetooth.fastble.service.BleServiceManager;
 import com.xiaochen.common.bluetooth.fastble.service.BluetoothLeService;
+import com.xiaochen.common.bluetooth.utils.LogUtil;
 import com.xiaochen.common.bluetooth.utils.SpUtil;
 
 import java.util.Set;
@@ -34,6 +34,8 @@ public abstract class AbsBaseBleDevice {
     protected final String TAG = getClass().getSimpleName();
     // 连接的设备
     protected BluetoothDevice mDevice;
+    // 蓝牙操作回调
+    private BleGattCallBackListener mBleCallBack;
 
     protected AbsBaseBleDevice() {
     }
@@ -43,10 +45,29 @@ public abstract class AbsBaseBleDevice {
      * 必须设置
      */
     public void setBleCallBack(BleGattCallBackListener bleCallBack) {
+        if (mBleCallBack == bleCallBack) {
+            return;
+        }
         if (type == DeviceConstants.SERVICE) {
             ServiceBleBaseDevice.INSTANCE.setBleCallBack(bleCallBack, getDeviceName());
         } else if (type == DeviceConstants.FAST_BLE) {
             FastbleBaseDevice.INSTANCE.setBleGattCallBack(bleCallBack);
+        }
+    }
+
+    /**
+     * 移除蓝牙服务回调
+     * 必须设置
+     */
+    public void removeBleCallBack(BleGattCallBackListener bleCallBack) {
+        if (mBleCallBack == bleCallBack) {
+            mBleCallBack = null;
+        }
+        stopScan();
+        if (type == DeviceConstants.SERVICE) {
+            ServiceBleBaseDevice.INSTANCE.removeBleCallBack(bleCallBack);
+        } else if (type == DeviceConstants.FAST_BLE) {
+            FastbleBaseDevice.INSTANCE.removeBleCallBack(bleCallBack);
         }
     }
 
@@ -130,6 +151,17 @@ public abstract class AbsBaseBleDevice {
     }
 
     /**
+     * 关闭蓝牙
+     */
+    public void disableBluetooth() {
+        if (type == DeviceConstants.SERVICE) {
+            ServiceBleBaseDevice.INSTANCE.disableBluetooth();
+        } else {
+            FastbleBaseDevice.INSTANCE.disableBluetooth();
+        }
+    }
+
+    /**
      * @return true 扫描到一个设备就连接,同时停止扫描; false 直到扫描结束
      */
     public boolean isNeedConnect() {
@@ -169,6 +201,29 @@ public abstract class AbsBaseBleDevice {
             ServiceBleBaseDevice.INSTANCE.connect(mDevice);
         } else if (type == DeviceConstants.FAST_BLE) {
             FastbleBaseDevice.INSTANCE.fastbleConnect(bleDevice);
+        }
+    }
+
+    /**
+     * 连接蓝牙
+     *
+     * @param device 蓝牙设备
+     */
+    public void connect(@NonNull BluetoothDevice device) {
+        connect(new BleDevice(device));
+    }
+
+    /**
+     * 连接蓝牙通过设备地址
+     *
+     * @param address
+     */
+    public void connect(@NonNull String address) {
+        this.mDevice = getBleDevice(address);
+        if (type == DeviceConstants.SERVICE) {
+            ServiceBleBaseDevice.INSTANCE.connect(address);
+        } else if (type == DeviceConstants.FAST_BLE) {
+            FastbleBaseDevice.INSTANCE.fastbleConnect(address);
         }
     }
 
@@ -215,6 +270,13 @@ public abstract class AbsBaseBleDevice {
     }
 
     /**
+     * 判断特定设备是否是已连接状态 true 已连接 false 反之
+     */
+    public boolean isConnected(@NonNull BluetoothDevice device) {
+        return isConnected(new BleDevice(device));
+    }
+
+    /**
      * @param address 蓝牙地址
      * @return 根据蓝牙地址获取蓝牙设备
      */
@@ -240,16 +302,18 @@ public abstract class AbsBaseBleDevice {
      * 获取上次连接过的设备
      */
     public BluetoothDevice getConnectedDevice() {
-        Set<BluetoothDevice> devices = getBondedDevices();
-        if (devices != null && !devices.isEmpty()) {
-            for (BluetoothDevice device : devices) {
-                if (TextUtils.equals(device.getAddress(), SpUtil.getConnectedAddress())) {
-                    mConnectedDevice = device;
-                    break;
-                }
-            }
-        }
+        mConnectedDevice = getBleDevice(SpUtil.getConnectedAddress());
         return mConnectedDevice;
+    }
+
+    /**
+     * 判断当前设备是否是本地连接的设备
+     */
+    public boolean isConnectedDevice(BluetoothDevice device) {
+        if (TextUtils.equals(device.getAddress(), SpUtil.getConnectedAddress())) {
+            return true;
+        }
+        return false;
     }
 
     /**

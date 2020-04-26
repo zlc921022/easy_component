@@ -6,7 +6,6 @@ import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
@@ -35,6 +34,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static android.bluetooth.BluetoothDevice.TRANSPORT_LE;
+
 /**
  * Created by zlc on 2018/12/13
  * Email: zlc921022@163.com
@@ -57,10 +59,6 @@ public class BluetoothLeService extends Service {
      */
     private BleGattCallBackListener mBleCallBack;
     /**
-     * 是不是在扫描
-     */
-    private volatile boolean mIsScaning = true;
-    /**
      * 设备名称 扫描指定名称的设备
      */
     private String mDeviceName;
@@ -75,7 +73,7 @@ public class BluetoothLeService extends Service {
     /**
      * 蓝牙回调类
      */
-    private BluetoothGattCallback mGattCallback;
+    private final MyBluetoothGattCallback mGattCallback = new MyBluetoothGattCallback();
     /**
      * 扫描处理handler
      */
@@ -90,7 +88,19 @@ public class BluetoothLeService extends Service {
     public void setBleGattCallBack(BleGattCallBackListener bleCallBack, String deviceName) {
         this.mBleCallBack = bleCallBack;
         this.mDeviceName = deviceName;
-        mGattCallback = new MyBluetoothGattCallback(bleCallBack);
+        mGattCallback.removeCallBackListener();
+        mGattCallback.setMCallbackListener(bleCallBack);
+    }
+
+    /**
+     * 移除服务回调
+     *
+     * @param bleCallBack 蓝牙服务回调
+     */
+    public void removeBleGattCallBack(BleGattCallBackListener bleCallBack) {
+        if (mGattCallback != null && mGattCallback.getMCallbackListener() == bleCallBack) {
+            mGattCallback.removeCallBackListener();
+        }
     }
 
     /**
@@ -132,6 +142,15 @@ public class BluetoothLeService extends Service {
     }
 
     /**
+     * 关闭蓝牙
+     */
+    public void disableBluetooth() {
+        if (mBluetoothAdapter != null) {
+            mBluetoothAdapter.disable();
+        }
+    }
+
+    /**
      * @return true 扫描到一个设备就连接,同时停止扫描 false 直到扫描结束
      */
     public boolean isNeedConnect() {
@@ -144,10 +163,10 @@ public class BluetoothLeService extends Service {
      * @param scanTime 扫描时间
      */
     public void startScan(long scanTime) {
-        Log.e("蓝牙服务", "=====开始扫描====");
-        if (getBluetoothAdapter() == null) {
+        if (getBluetoothAdapter() == null || BleScanManager.INSTANCE.getMIsScanning().get()) {
             return;
         }
+        Log.e("蓝牙服务", "=====开始扫描====");
         BleScanManager.INSTANCE.setOnBleScanCallBack(new BleScanManager.OnBleScanCallBack() {
             @Override
             public void onBleScanFinished(@Nullable List<BleDevice> device) {
@@ -171,7 +190,9 @@ public class BluetoothLeService extends Service {
      */
     public void stopScan() {
         Log.e("蓝牙服务", "=====停止扫描====");
-        BleScanManager.INSTANCE.stopScan();
+        if (BleScanManager.INSTANCE.getMIsScanning().get()) {
+            BleScanManager.INSTANCE.stopScan();
+        }
     }
 
     /**
@@ -204,8 +225,6 @@ public class BluetoothLeService extends Service {
             return false;
         } else if (isConnected(device)) {
             return true;
-        } else if (mHashMap.containsKey(device)) {
-            return mHashMap.get(device).connect();
         } else if (mHashMap.size() >= 8) {
             return false;
         } else {
@@ -213,7 +232,7 @@ public class BluetoothLeService extends Service {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && mBluetoothAdapter.isLe2MPhySupported()) {
                 gatt = connectGatt(device, BluetoothDevice.PHY_LE_2M_MASK);
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                gatt = connectGatt(device, BluetoothDevice.PHY_LE_1M_MASK);
+                gatt = device.connectGatt(this, false, this.mGattCallback, TRANSPORT_LE);
             } else {
                 gatt = device.connectGatt(this, false, this.mGattCallback);
             }

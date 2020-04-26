@@ -40,13 +40,13 @@ public class BaseFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        if (mView != null) {
-            initView();
-            initData();
-            initListener();
-        } else {
-            super.onActivityCreated(savedInstanceState);
+        super.onActivityCreated(savedInstanceState);
+        if (mView == null) {
+            return;
         }
+        initView();
+        initData();
+        initListener();
     }
 
     /**

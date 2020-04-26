@@ -10,21 +10,21 @@ public final class UUIDConstants {
     /**
      * 服务UUID
      */
-    public static final String SERVICE_UUID = "0000fff0-0000-1000-8000-00805f9b34fb";
+    public static final String SERVICE_UUID = "";
     /**
      * 通知UUID
      */
-    public static final String NOTIFY_CHAR_UUID = "0000fff1-0000-1000-8000-00805f9b34fb";
+    public static final String NOTIFY_CHAR_UUID = "";
     /**
      * 读UUID
      */
-    public static final String READ_CHAR_UUID = "0000fff1-0000-1000-8000-00805f9b34fb";
+    public static final String READ_CHAR_UUID = "";
     /**
      * 写UUID
      */
-    public static final String WRITE_CHAR_UUID = "0000fff2-0000-1000-8000-00805f9b34fb";
+    public static final String WRITE_CHAR_UUID = "";
     /**
      * 写描述符UUID
      */
-    public static final String DESCRIPTOR_UUID = "00002902-0000-1000-8000-00805f9b34fb";
+    public static final String DESCRIPTOR_UUID = "";
 }

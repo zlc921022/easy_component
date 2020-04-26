@@ -12,7 +12,7 @@ import androidx.room.RoomDatabase;
  * @作者： zhenglecheng
  * @创建时间： 2019/10/16 11:14
  */
-@Database(entities = {User.class}, version = 1)
+@Database(entities = {User.class}, version = 1,exportSchema = false)
 public abstract class AppDataBase extends RoomDatabase {
 
     public abstract UserDao userDao();

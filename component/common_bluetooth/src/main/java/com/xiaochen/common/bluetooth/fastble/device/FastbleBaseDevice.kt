@@ -46,6 +46,12 @@ object FastbleBaseDevice {
         this.mBleGattCallBack = bleCallBack
     }
 
+    fun removeBleCallBack(bleCallBack: BleGattCallBackListener) {
+        if (this.mBleGattCallBack == bleCallBack) {
+            this.mBleGattCallBack = null
+        }
+    }
+
     /**
      * 初始化
      */
@@ -79,6 +85,13 @@ object FastbleBaseDevice {
      */
     fun enableBluetooth() {
         BleManager.getInstance().enableBluetooth()
+    }
+
+    /**
+     * 关闭蓝牙
+     */
+    fun disableBluetooth() {
+        BleManager.getInstance().disableBluetooth()
     }
 
     /**
