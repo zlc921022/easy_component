@@ -6,5 +6,12 @@ apply plugin: 'kotlin-android-extensions'
 def thirdDependencies = rootProject.ext.thirdDependencies
 dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation thirdDependencies.arouter
+    api thirdDependencies.timber
+    api thirdDependencies.arouter
+    api thirdDependencies.glide
+    api thirdDependencies.eventbus
+    api thirdDependencies.butterknife
+    api thirdDependencies.dagger2
+    annotationProcessor thirdDependencies.dagger2Processor
+    annotationProcessor thirdDependencies.butterKnifeCompiler
 }

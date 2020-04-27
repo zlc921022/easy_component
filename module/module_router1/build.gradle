@@ -10,6 +10,4 @@ dependencies {
     implementation project(':component:common_base')
     implementation project(':component:common_sdk')
     implementation project(':component:common_utils')
-
-    implementation thirdDependencies.eventbus
 }

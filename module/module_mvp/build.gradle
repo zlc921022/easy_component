@@ -12,7 +12,5 @@ dependencies {
     implementation project(':component:common_sdk')
     implementation project(':component:common_base')
 
-    implementation thirdDependencies.butterknife
-    annotationProcessor thirdDependencies.butterKnifeCompiler
 }
 

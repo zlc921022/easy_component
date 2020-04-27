@@ -61,8 +61,6 @@ ext {
     // 刷新框架
     def smartRefreshLayout = "1.1.0"
     def smartRefreshHeader = "1.1.0"
-    // 避免rx内存泄漏
-    def autoDispose = "1.4.0"
     // gson
     def gson = "2.8.6"
     // 事件通信
@@ -94,48 +92,49 @@ ext {
     def statusbarutil = "1.5.1"
     // 蓝牙
     def fastble = "2.3.4"
+    // dagger2
+    def dagger2 = "2.27"
 
     thirdDependencies = [
 
-            rxJava                   : "io.reactivex.rxjava2:rxjava:${rxJava}",
-            rxAndroid                : "io.reactivex.rxjava2:rxandroid:${rxAndroid}",
-            retrofit                 : "com.squareup.retrofit2:retrofit:${retrofit}",
-            okhttp                   : "com.squareup.okhttp3:okhttp:${okhttp}",
-            okhttpLoggingInterceptor : "com.squareup.okhttp3:logging-interceptor:${okhttpLoggingInterceptor}",
-            retrofitConverterGson    : "com.squareup.retrofit2:converter-gson:${retrofitConverterGson}",
-            rxJavaAdapter            : "com.squareup.retrofit2:adapter-rxjava2:${rxJavaAdapter}",
-            baseRecyclerViewAdapter  : "com.github.CymChad:BaseRecyclerViewAdapterHelper:${baseRecyclerViewAdapter}",
-            glide                    : "com.github.bumptech.glide:glide:${glide}",
-            glideCompiler            : "com.github.bumptech.glide:compiler:${glide}",
-            gson                     : "com.google.code.gson:gson:${gson}",
-            eventbus                 : "org.greenrobot:eventbus:${eventbus}",
-            timber                   : "com.jakewharton.timber:timber:${timber}",
-            butterknife              : "com.jakewharton:butterknife:${butterknife}",
-            butterKnifeCompiler      : "com.jakewharton:butterknife-compiler:${butterknife}",
-            luban                    : "top.zibin:Luban:${luban}",
-            pickerView               : "com.contrarywind:Android-PickerView:${pickerView}",
-            autoSize                 : "me.jessyan:autosize:${autoSize}",
-            photoView                : "com.github.chrisbanes:PhotoView:${photoView}",
-            lifecycle                : "androidx.lifecycle:lifecycle-extensions:${lifecycle}",
-            viewmodel                : "androidx.lifecycle:lifecycle-viewmodel:${lifecycle}",
-            livedata                 : "androidx.lifecycle:lifecycle-livedata:${lifecycle}",
-            viewModelKtx             : "androidx.lifecycle:lifecycle-viewmodel-ktx:${viewModelKtx}",
-            smartRefreshLayout       : "com.scwang.smartrefresh:SmartRefreshLayout:${smartRefreshLayout}",
-            smartRefreshHeader       : "com.scwang.smartrefresh:SmartRefreshHeader:${smartRefreshHeader}",
-            //  https://github.com/uber/AutoDispose
-            autoDispose              : "com.uber.autodispose:autodispose:${autoDispose}",
-            autoDisposeAndroid       : "com.uber.autodispose:autodispose-android:${autoDispose}",
-            autoDisposeArchcomponents: "com.uber.autodispose:autodispose-android-archcomponents:${autoDispose}",
-            banner                   : "com.youth.banner:banner:${banner}",
-            rxpermissions            : "com.github.tbruyelle:rxpermissions:${rxpermissions}",
-            materialDialogs          : "com.afollestad.material-dialogs:core:${materialDialogs}",
-            kotlin                   : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin}",
+            rxJava                  : "io.reactivex.rxjava2:rxjava:${rxJava}",
+            rxAndroid               : "io.reactivex.rxjava2:rxandroid:${rxAndroid}",
+            retrofit                : "com.squareup.retrofit2:retrofit:${retrofit}",
+            okhttp                  : "com.squareup.okhttp3:okhttp:${okhttp}",
+            okhttpLoggingInterceptor: "com.squareup.okhttp3:logging-interceptor:${okhttpLoggingInterceptor}",
+            retrofitConverterGson   : "com.squareup.retrofit2:converter-gson:${retrofitConverterGson}",
+            rxJavaAdapter           : "com.squareup.retrofit2:adapter-rxjava2:${rxJavaAdapter}",
+            baseRecyclerViewAdapter : "com.github.CymChad:BaseRecyclerViewAdapterHelper:${baseRecyclerViewAdapter}",
+            glide                   : "com.github.bumptech.glide:glide:${glide}",
+            glideCompiler           : "com.github.bumptech.glide:compiler:${glide}",
+            gson                    : "com.google.code.gson:gson:${gson}",
+            eventbus                : "org.greenrobot:eventbus:${eventbus}",
+            timber                  : "com.jakewharton.timber:timber:${timber}",
+            butterknife             : "com.jakewharton:butterknife:${butterknife}",
+            butterKnifeCompiler     : "com.jakewharton:butterknife-compiler:${butterknife}",
+            luban                   : "top.zibin:Luban:${luban}",
+            pickerView              : "com.contrarywind:Android-PickerView:${pickerView}",
+            autoSize                : "me.jessyan:autosize:${autoSize}",
+            photoView               : "com.github.chrisbanes:PhotoView:${photoView}",
+            lifecycle               : "androidx.lifecycle:lifecycle-extensions:${lifecycle}",
+            viewmodel               : "androidx.lifecycle:lifecycle-viewmodel:${lifecycle}",
+            livedata                : "androidx.lifecycle:lifecycle-livedata:${lifecycle}",
+            viewModelKtx            : "androidx.lifecycle:lifecycle-viewmodel-ktx:${viewModelKtx}",
+            smartRefreshLayout      : "com.scwang.smartrefresh:SmartRefreshLayout:${smartRefreshLayout}",
+            smartRefreshHeader      : "com.scwang.smartrefresh:SmartRefreshHeader:${smartRefreshHeader}",
+            banner                  : "com.youth.banner:banner:${banner}",
+            rxpermissions           : "com.github.tbruyelle:rxpermissions:${rxpermissions}",
+            materialDialogs         : "com.afollestad.material-dialogs:core:${materialDialogs}",
+            kotlin                  : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin}",
             //  路由 https://github.com/alibaba/ARouter
-            arouter                  : "com.alibaba:arouter-api:${arouter}",
-            arouterCompiler          : "com.alibaba:arouter-compiler:1.2.2",
+            arouter                 : "com.alibaba:arouter-api:${arouter}",
+            arouterCompiler         : "com.alibaba:arouter-compiler:1.2.2",
             // 沉浸式状态栏
-            statusbarutil            : "com.jaeger.statusbarutil:library:${statusbarutil}",
+            statusbarutil           : "com.jaeger.statusbarutil:library:${statusbarutil}",
             // 蓝牙
-            fastble                  : "com.clj.fastble:FastBleLib:${fastble}"
+            fastble                 : "com.clj.fastble:FastBleLib:${fastble}",
+            // 依赖注入框架
+            dagger2                : "com.google.dagger:dagger:${dagger2}",
+            dagger2Processor       : "com.google.dagger:dagger-android-processor:${dagger2}"
     ]
 }

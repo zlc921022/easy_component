@@ -11,6 +11,5 @@ dependencies {
     implementation project(':component:common_bluetooth')
     implementation project(':component:common_sdk')
 
-    implementation thirdDependencies.eventbus
     kapt thirdDependencies.arouterCompiler
 }
