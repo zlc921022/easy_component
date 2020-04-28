@@ -9,5 +9,6 @@
     <string name="app_jetpack">app-jetpack</string>
     <string name="aop_widget">app-widget</string>
     <string name="aop_mvvm">app-mvvm</string>
+    <string name="aop_dagger2">app-dagger2</string>
 
 </resources>

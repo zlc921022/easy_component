@@ -1,0 +1,10 @@
+apply from: "../../common_module.gradle"
+
+def thirdDependencies = rootProject.ext.thirdDependencies
+dependencies {
+    implementation project(':component:common_base')
+    implementation project(':component:common_utils')
+    implementation project(':component:common_sdk')
+
+    annotationProcessor thirdDependencies.dagger2Compiler
+}

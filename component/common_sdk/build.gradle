@@ -12,6 +12,5 @@ dependencies {
     api thirdDependencies.eventbus
     api thirdDependencies.butterknife
     api thirdDependencies.dagger2
-    annotationProcessor thirdDependencies.dagger2Processor
     annotationProcessor thirdDependencies.butterKnifeCompiler
 }

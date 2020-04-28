@@ -134,7 +134,7 @@ ext {
             // 蓝牙
             fastble                 : "com.clj.fastble:FastBleLib:${fastble}",
             // 依赖注入框架
-            dagger2                : "com.google.dagger:dagger:${dagger2}",
-            dagger2Processor       : "com.google.dagger:dagger-android-processor:${dagger2}"
+            dagger2                 : "com.google.dagger:dagger:${dagger2}",
+            dagger2Compiler         : "com.google.dagger:dagger-compiler:${dagger2}"
     ]
 }
