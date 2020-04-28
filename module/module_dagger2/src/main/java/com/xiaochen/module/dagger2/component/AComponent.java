@@ -1,10 +1,9 @@
 package com.xiaochen.module.dagger2.component;
 
-import com.xiaochen.module.dagger2.MainActivity;
+import com.xiaochen.module.dagger2.Dagger2OtherActivity;
 import com.xiaochen.module.dagger2.module.AModule;
 import com.xiaochen.module.dagger2.scope.AScope;
 
-import dagger.Component;
 import dagger.Subcomponent;
 
 /**
@@ -16,5 +15,5 @@ import dagger.Subcomponent;
 @AScope
 @Subcomponent(modules = AModule.class)
 public interface AComponent {
-    void inject(MainActivity activity);
+    void inject(Dagger2OtherActivity activity);
 }

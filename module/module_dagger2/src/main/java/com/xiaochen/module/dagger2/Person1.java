@@ -1,23 +1,16 @@
 package com.xiaochen.module.dagger2;
 
 
-import javax.inject.Inject;
-
 /**
  * <p></p >
  *
  * @author zhenglecheng
  * @date 2020/4/28
  */
-public class Person {
+public class Person1 {
     private String name;
 
-    @Inject
-    public Person() {
-        name = "郑乐成";
-    }
-
-    public Person(String name) {
+    public Person1(String name) {
         this.name = name;
     }
 

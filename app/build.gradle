@@ -116,6 +116,7 @@ dependencies {
     runtimeOnly project(':module:module_router2')
     runtimeOnly project(':module:module_mvp')
     runtimeOnly(project(':module:module_mvvm'))
+    runtimeOnly(project(':module:module_dagger2'))
     runtimeOnly(project(':module:module_jetpack')) {
         exclude group: 'androidx.arch.core'
         exclude group: 'androidx.annotation'

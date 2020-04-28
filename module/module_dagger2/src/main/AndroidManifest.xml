@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.xiaochen.module.dagger2">
 
     <application>
-        <activity android:name=".OtherActivity" />
+        <activity android:name=".Dagger2OtherActivity" />
+        <activity android:name=".Dagger2MainActivity" />
     </application>
 </manifest>

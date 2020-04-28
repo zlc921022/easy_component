@@ -17,6 +17,7 @@ public class PathConstant {
     public static final String BLUETOOTH_ACTIVITY = "/bluoth/maActivity";
     public static final String WIDGET_ACTIVITY = "/widget/mainActivity";
     public static final String AROUTER_ACTIVITY = "/router1/mainActivity";
+    public static final String DAGGER2_ACTIVITY = "/dagger12/dagger2Activity";
 
     public static final String TEST_ACTIVITY = "/router2/testActivity";
     public static final String TEST_ACTIVITY2 = "/router2/testActivity2";

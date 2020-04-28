@@ -1,6 +1,8 @@
 package com.xiaochen.module.dagger2.module;
 
 import com.xiaochen.module.dagger2.Person;
+import com.xiaochen.module.dagger2.Person1;
+import com.xiaochen.module.dagger2.PersonQualifier;
 import com.xiaochen.module.dagger2.scope.AScope;
 
 import javax.inject.Named;
@@ -17,18 +19,18 @@ import dagger.Provides;
 @Module
 public class AModule {
 
-    @Named( "m")
+    @PersonQualifier( "m")
     @AScope
     @Provides
-    public Person getPerson() {
-        return new Person("小城");
+    public Person1 getPerson() {
+        return new Person1("小城");
     }
 
-    @Named( "w")
+    @PersonQualifier( "w")
     @AScope
     @Provides
-    public Person getGirlFriend() {
-        return new Person("小艳");
+    public Person1 getGirlFriend() {
+        return new Person1("小艳");
     }
 
 }

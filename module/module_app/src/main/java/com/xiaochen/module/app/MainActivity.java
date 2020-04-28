@@ -25,6 +25,7 @@ public class MainActivity extends BaseActivity {
     private Button mBtn3;
     private Button mBtn4;
     private Button mBtn5;
+    private Button mBtn6;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class MainActivity extends BaseActivity {
         mBtn3 = find(R.id.btn_3);
         mBtn4 = find(R.id.btn_4);
         mBtn5 = find(R.id.btn_5);
+        mBtn6 = find(R.id.btn_6);
     }
 
     @Override
@@ -59,6 +61,7 @@ public class MainActivity extends BaseActivity {
         mBtn3.setOnClickListener(this);
         mBtn4.setOnClickListener(this);
         mBtn5.setOnClickListener(this);
+        mBtn6.setOnClickListener(this);
     }
 
     private <T extends View> T find(int id) {
@@ -81,6 +84,8 @@ public class MainActivity extends BaseActivity {
             ARouter.getInstance().build(PathConstant.WIDGET_ACTIVITY).navigation();
         } else if (id == R.id.btn_5) {
             ARouter.getInstance().build(PathConstant.AROUTER_ACTIVITY).navigation();
+        }else if(id == R.id.btn_6){
+            ARouter.getInstance().build(PathConstant.DAGGER2_ACTIVITY).navigation();
         }
     }
 }
