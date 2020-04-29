@@ -7,9 +7,11 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.alibaba.android.arouter.launcher.ARouter;
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.xiaochen.common.base.BaseActivity;
-import com.xiaocheng.common.sdk.PathConstant;
+import com.xiaochen.common.sdk.RouterManager;
+import com.xiaochen.common.sdk.RouterPathConstant;
+import com.xiaochen.common.service.CommonNameService;
 
 /**
  * <p>{d}</p>
@@ -27,6 +29,27 @@ public class MainActivity extends BaseActivity {
     private Button mBtn5;
     private Button mBtn6;
 
+    @Autowired(name = RouterPathConstant.BLUETOOTH_SERVICE)
+    CommonNameService mBluetoothInfoService;
+
+    @Autowired(name = RouterPathConstant.DAGGER2_SERVICE)
+    CommonNameService mDagger2InfoService;
+
+    @Autowired(name = RouterPathConstant.JETPACK_SERVICE)
+    CommonNameService mJetpackInfoService;
+
+    @Autowired(name = RouterPathConstant.MVP_SERVICE)
+    CommonNameService mMvpInfoService;
+
+    @Autowired(name = RouterPathConstant.MVVM_SERVICE)
+    CommonNameService mMvvmInfoService;
+
+    @Autowired(name = RouterPathConstant.AROUTER_SERVICE)
+    CommonNameService mArouterInfoService;
+
+    @Autowired(name = RouterPathConstant.WIDGET_SERVICE)
+    CommonNameService mWidgetInfoService;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +63,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initView() {
         super.initView();
+        RouterManager.inject(this);
+
         find(R.id.back_button).setVisibility(View.GONE);
         TextView title = find(R.id.title_text);
         title.setText("easy_component");
@@ -50,6 +75,32 @@ public class MainActivity extends BaseActivity {
         mBtn4 = find(R.id.btn_4);
         mBtn5 = find(R.id.btn_5);
         mBtn6 = find(R.id.btn_6);
+
+        setModuleName();
+    }
+
+    private void setModuleName() {
+        if (mMvpInfoService != null) {
+            mBtn0.setText(mMvpInfoService.getModuleName());
+        }
+        if (mMvvmInfoService != null) {
+            mBtn1.setText(mMvvmInfoService.getModuleName());
+        }
+        if (mJetpackInfoService != null) {
+            mBtn2.setText(mJetpackInfoService.getModuleName());
+        }
+        if (mBluetoothInfoService != null) {
+            mBtn3.setText(mBluetoothInfoService.getModuleName());
+        }
+        if (mWidgetInfoService != null) {
+            mBtn4.setText(mWidgetInfoService.getModuleName());
+        }
+        if (mArouterInfoService != null) {
+            mBtn5.setText(mArouterInfoService.getModuleName());
+        }
+        if (mDagger2InfoService != null) {
+            mBtn6.setText(mDagger2InfoService.getModuleName());
+        }
     }
 
     @Override
@@ -73,19 +124,19 @@ public class MainActivity extends BaseActivity {
         super.onClick(v);
         int id = v.getId();
         if (id == R.id.btn_0) {
-            ARouter.getInstance().build(PathConstant.MVP_ACTIVITY).navigation();
+            RouterManager.navigation(RouterPathConstant.MVP_ACTIVITY);
         } else if (id == R.id.btn_1) {
-            ARouter.getInstance().build(PathConstant.MVVM_ACTIVITY).navigation();
+            RouterManager.navigation(RouterPathConstant.MVVM_ACTIVITY);
         } else if (id == R.id.btn_2) {
-            ARouter.getInstance().build(PathConstant.JETPACK_ACTIVITY).navigation();
+            RouterManager.navigation(RouterPathConstant.JETPACK_ACTIVITY);
         } else if (id == R.id.btn_3) {
-            ARouter.getInstance().build(PathConstant.BLUETOOTH_ACTIVITY).navigation();
+            RouterManager.navigation(RouterPathConstant.BLUETOOTH_ACTIVITY);
         } else if (id == R.id.btn_4) {
-            ARouter.getInstance().build(PathConstant.WIDGET_ACTIVITY).navigation();
+            RouterManager.navigation(RouterPathConstant.WIDGET_ACTIVITY);
         } else if (id == R.id.btn_5) {
-            ARouter.getInstance().build(PathConstant.AROUTER_ACTIVITY).navigation();
-        }else if(id == R.id.btn_6){
-            ARouter.getInstance().build(PathConstant.DAGGER2_ACTIVITY).navigation();
+            RouterManager.navigation(RouterPathConstant.AROUTER_ACTIVITY);
+        } else if (id == R.id.btn_6) {
+            RouterManager.navigation(RouterPathConstant.DAGGER2_ACTIVITY);
         }
     }
 }

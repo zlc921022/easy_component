@@ -2,17 +2,20 @@ package com.xiaochen.module.dagger2;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.gson.Gson;
 import com.xiaochen.common.base.BaseActivity;
+import com.xiaochen.common.sdk.RouterManager;
+import com.xiaochen.common.sdk.RouterPathConstant;
+import com.xiaochen.common.service.CommonNameService;
+import com.xiaochen.common.utils.LogUtil;
 import com.xiaochen.module.dagger2.component.ApplicationComponent;
 import com.xiaochen.module.dagger2.component.DaggerApplicationComponent;
 import com.xiaochen.module.dagger2.component.DaggerMainComponent;
 import com.xiaochen.module.dagger2.module.ApplicationModule;
-import com.xiaocheng.common.sdk.PathConstant;
 
 import javax.inject.Inject;
 
@@ -22,7 +25,7 @@ import javax.inject.Inject;
  * @author zhenglecheng
  * @date 2020/4/28
  */
-@Route(path = PathConstant.DAGGER2_ACTIVITY)
+@Route(path = RouterPathConstant.DAGGER2_ACTIVITY)
 public class Dagger2MainActivity extends BaseActivity {
 
     @Inject
@@ -34,6 +37,12 @@ public class Dagger2MainActivity extends BaseActivity {
     @Inject
     SharedPreferences mSp;
 
+    /**
+     * 测试调取别的模块服务的方法
+     */
+    @Autowired(name = RouterPathConstant.WIDGET_SERVICE)
+    CommonNameService mWidgetInfoService;
+
     @Override
     protected int getLayoutResId() {
         return R.layout.dagger2_activity_main;
@@ -42,6 +51,7 @@ public class Dagger2MainActivity extends BaseActivity {
     @Override
     protected void initView() {
         super.initView();
+        RouterManager.inject(this);
         TextView tv = findViewById(R.id.tv);
         findViewById(R.id.back_button).setOnClickListener(v -> finish());
         TextView title = findViewById(R.id.title_text);
@@ -55,8 +65,11 @@ public class Dagger2MainActivity extends BaseActivity {
                 .inject(this);
         String json = mGson.toJson(mPerson);
         tv.setText(json);
-        Log.e("MainActivity person", mPerson.getName());
-        Log.e("MainActivity sp", mSp + "");
+        LogUtil.e("MainActivity person", mPerson.getName());
+        LogUtil.e("MainActivity sp", mSp + "");
+        if (mWidgetInfoService != null) {
+            LogUtil.e("MainActivity widget name", mWidgetInfoService.getModuleName());
+        }
         tv.setOnClickListener(v -> {
             Intent intent = new Intent(this, Dagger2OtherActivity.class);
             startActivity(intent);

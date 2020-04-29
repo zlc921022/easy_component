@@ -9,9 +9,10 @@ import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.xiaochen.common.base.BaseActivity;
-import com.xiaocheng.common.sdk.PathConstant;
+import com.xiaochen.common.sdk.RouterManager;
+import com.xiaochen.common.sdk.RouterPathConstant;
+import com.xiaochen.common.utils.LogUtil;
 
 /**
  * <p></p >
@@ -19,7 +20,7 @@ import com.xiaocheng.common.sdk.PathConstant;
  * @author zhenglecheng
  * @date 2020/4/17
  */
-@Route(path = PathConstant.TEST_ACTIVITY)
+@Route(path = RouterPathConstant.TEST_ACTIVITY)
 public class MainActivity2 extends BaseActivity {
 
     @Autowired
@@ -28,20 +29,17 @@ public class MainActivity2 extends BaseActivity {
     public int age;
     @Autowired
     public double money;
-    @Autowired(name = "bundle")
-    public Bundle mBundle;
+    @Autowired
+    public String work;
     @Autowired(name = "userInfo")
     public Object userInfo;
+    public Bundle bundle;
     private TextView mText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        ARouter.getInstance().inject(this);
+        RouterManager.inject(this);
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.router2_activity_main2);
-//        initView();
-//        initData();
-//        initListener();
     }
 
     @Override
@@ -61,21 +59,23 @@ public class MainActivity2 extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        if (!isEmpty()) {
-            StringBuffer sb = new StringBuffer();
-            sb.append("名字：").append(name).append("\n");
-            sb.append("年龄：").append(age).append("\n");
-            sb.append("金钱：").append(money).append("\n");
-            sb.append("工作：").append(mBundle.getString("work")).append("\n");
-            sb.append("用户信息：").append(userInfo.toString());
-            mText.setText(sb.toString());
+        bundle = getIntent().getExtras();
+        if (isUserInfoEmpty()) {
+            return;
         }
+        StringBuffer sb = new StringBuffer();
+        sb.append("名字：").append(name).append("\n");
+        sb.append("年龄：").append(age).append("\n");
+        sb.append("月薪：").append(money).append("\n");
+        sb.append("工作：").append(work).append("\n");
+        sb.append("用户信息：").append(userInfo.toString()).append("\n");
+        mText.setText(sb.toString());
+        LogUtil.e(TAG, "name:=" + name);
     }
 
-    private boolean isEmpty() {
-        return TextUtils.isEmpty(name) || age == 0
-                || money == 0 || TextUtils.isEmpty(mBundle.getString("work"))
-                || userInfo == null;
+    private boolean isUserInfoEmpty() {
+        return TextUtils.isEmpty(name) || age == 0 || money == 0
+                || TextUtils.isEmpty(work) || userInfo == null;
     }
 
     @Override

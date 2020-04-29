@@ -10,7 +10,8 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.xiaochen.common.base.BaseActivity;
-import com.xiaocheng.common.sdk.PathConstant;
+import com.xiaochen.common.sdk.RouterManager;
+import com.xiaochen.common.sdk.RouterPathConstant;
 
 /**
  * <p>{d}</p>
@@ -18,7 +19,7 @@ import com.xiaocheng.common.sdk.PathConstant;
  * @author zhenglecheng
  * @date 2020/4/19
  */
-@Route(path = PathConstant.TEST_ACTIVITY3)
+@Route(path = RouterPathConstant.TEST_ACTIVITY3)
 public class UrlTestActivity extends BaseActivity {
 
     @Autowired
@@ -28,7 +29,7 @@ public class UrlTestActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        ARouter.getInstance().inject(this);
+        RouterManager.inject(this);
         super.onCreate(savedInstanceState);
     }
 

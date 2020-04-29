@@ -1,10 +1,10 @@
 package com.xiaochen.module.dagger2;
 
-import android.util.Log;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.xiaochen.common.base.BaseActivity;
+import com.xiaochen.common.utils.LogUtil;
 import com.xiaochen.module.dagger2.component.DaggerApplicationComponent;
 import com.xiaochen.module.dagger2.module.AModule;
 
@@ -40,6 +40,6 @@ public class Dagger2OtherActivity extends BaseActivity {
         DaggerApplicationComponent.builder().build().plus(new AModule()).inject(this);
         String json = mGson.toJson(mPerson);
         tv.setText(json);
-        Log.e("OtherActivity", mPerson + "");
+        LogUtil.e("OtherActivity", mPerson + "");
     }
 }

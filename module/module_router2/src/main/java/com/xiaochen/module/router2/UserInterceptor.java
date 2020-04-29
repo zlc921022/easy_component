@@ -7,7 +7,7 @@ import com.alibaba.android.arouter.facade.annotation.Interceptor;
 import com.alibaba.android.arouter.facade.callback.InterceptorCallback;
 import com.alibaba.android.arouter.facade.template.IInterceptor;
 import com.xiaochen.common.utils.LogUtil;
-import com.xiaocheng.common.sdk.PathConstant;
+import com.xiaochen.common.sdk.RouterPathConstant;
 
 /**
  * <p>{d}</p>
@@ -19,7 +19,7 @@ import com.xiaocheng.common.sdk.PathConstant;
 public class UserInterceptor implements IInterceptor {
     @Override
     public void process(Postcard postcard, InterceptorCallback callback) {
-        if (PathConstant.TEST_ACTIVITY2.equalsIgnoreCase(postcard.getPath())) {
+        if (RouterPathConstant.TEST_ACTIVITY2.equalsIgnoreCase(postcard.getPath())) {
             LogUtil.e("UserInterceptor process", "开始拦截操作");
            // callback.onInterrupt(new Exception("纯纯粹粹"));
         }

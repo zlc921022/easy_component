@@ -107,6 +107,7 @@ dependencies {
 
     implementation project(':component:common_base')
     implementation project(':component:common_data')
+    implementation project(':component:common_sdk')
 
     runtimeOnly project(':module:module_widget')
     runtimeOnly project(':module:module_bluetooth')

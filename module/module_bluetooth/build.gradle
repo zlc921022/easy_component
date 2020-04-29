@@ -10,6 +10,7 @@ dependencies {
     implementation project(':component:common_utils')
     implementation project(':component:common_bluetooth')
     implementation project(':component:common_sdk')
+    implementation project(':component:common_service')
 
     kapt thirdDependencies.arouterCompiler
 }

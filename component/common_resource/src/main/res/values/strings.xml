@@ -11,4 +11,13 @@
     <string name="aop_mvvm">app-mvvm</string>
     <string name="aop_dagger2">app-dagger2</string>
 
+    <!--模块命名-->
+    <string name="module_bluetooth">蓝牙学习</string>
+    <string name="module_dagger2">dagger2学习</string>
+    <string name="module_jetpack">jetpack学习</string>
+    <string name="module_mvp">mvp测试</string>
+    <string name="module_mvvm">mvvm测试</string>
+    <string name="module_arouter">arouter学习</string>
+    <string name="module_widget">自定义控件学习</string>
+
 </resources>

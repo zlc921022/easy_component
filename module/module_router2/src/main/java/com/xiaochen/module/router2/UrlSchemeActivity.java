@@ -3,13 +3,13 @@ package com.xiaochen.module.router2;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.alibaba.android.arouter.facade.Postcard;
-import com.alibaba.android.arouter.facade.callback.NavCallback;
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.xiaochen.common.utils.LogUtil;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.alibaba.android.arouter.facade.Postcard;
+import com.alibaba.android.arouter.facade.callback.NavCallback;
+import com.xiaochen.common.sdk.RouterManager;
+import com.xiaochen.common.utils.LogUtil;
 
 /**
  * <p>{d}</p>
@@ -23,21 +23,21 @@ public class UrlSchemeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Uri uri = getIntent().getData();
-        if(uri != null) {
-            ARouter.getInstance().build(uri).navigation(this, new NavCallback() {
+        if (uri != null) {
+            RouterManager.navigation(this, uri, new NavCallback() {
                 @Override
                 public void onFound(Postcard postcard) {
-                    LogUtil.e("UrlSchemeActivity","onFound");
+                    LogUtil.e("UrlSchemeActivity", "onFound");
                 }
 
                 @Override
                 public void onLost(Postcard postcard) {
-                    LogUtil.e("UrlSchemeActivity","onLost");
+                    LogUtil.e("UrlSchemeActivity", "onLost");
                 }
 
                 @Override
                 public void onArrival(Postcard postcard) {
-                    LogUtil.e("UrlSchemeActivity","onArrival");
+                    LogUtil.e("UrlSchemeActivity", "onArrival");
                 }
             });
             finish();

@@ -7,4 +7,5 @@ android {
 dependencies {
     implementation project(':component:common_widget')
     implementation project(':component:common_sdk')
+    implementation project(':component:common_service')
 }

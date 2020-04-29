@@ -12,7 +12,7 @@ import com.xiaochen.common.utils.ToastUtil;
 import com.xiaochen.module.mvp.presenter.TestPresenter;
 import com.xiaochen.module.mvp.response.HomeArticleRespVO;
 import com.xiaochen.module.mvp.view.ITestView;
-import com.xiaocheng.common.sdk.PathConstant;
+import com.xiaochen.common.sdk.RouterPathConstant;
 
 /**
  * <p>主页</p >
@@ -20,7 +20,7 @@ import com.xiaocheng.common.sdk.PathConstant;
  * @author zhenglecheng
  * @date 2019/12/26
  */
-@Route(path = PathConstant.MVP_ACTIVITY)
+@Route(path = RouterPathConstant.MVP_ACTIVITY)
 public class MainActivity extends BaseMvpActivity<TestPresenter> implements ITestView {
 
 

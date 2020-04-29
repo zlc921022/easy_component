@@ -6,7 +6,7 @@
         android:allowBackup="true"
         android:label="@string/aop_dagger2"
         android:theme="@style/AppTheme"
-        android:name="com.xiaochen.module.dagger2.Dagger2Application">
+        android:name="com.xiaochen.common.base.BaseApplication">
         <activity android:name="com.xiaochen.module.dagger2.Dagger2MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

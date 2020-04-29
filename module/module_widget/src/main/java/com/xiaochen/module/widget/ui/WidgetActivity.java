@@ -9,10 +9,11 @@ import androidx.fragment.app.Fragment;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.xiaochen.common.base.BaseActivity;
+import com.xiaochen.common.sdk.RouterManager;
 import com.xiaochen.module.widget.R;
 import com.xiaochen.module.widget.ui.fragment.ViewFragment;
 import com.xiaochen.module.widget.ui.fragment.ViewGroupFragment;
-import com.xiaocheng.common.sdk.PathConstant;
+import com.xiaochen.common.sdk.RouterPathConstant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.List;
 /**
  * @author 自定义View Activity
  */
-@Route(path = PathConstant.WIDGET_ACTIVITY)
+@Route(path = RouterPathConstant.WIDGET_ACTIVITY)
 public class WidgetActivity extends BaseActivity {
 
     private RadioGroup mRgMain;
@@ -31,7 +32,7 @@ public class WidgetActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ARouter.getInstance().inject(this);
+        RouterManager.inject(this);
     }
 
     @Override

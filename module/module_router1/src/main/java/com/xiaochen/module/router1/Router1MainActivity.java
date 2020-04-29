@@ -10,11 +10,12 @@ import androidx.fragment.app.Fragment;
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.facade.callback.NavCallback;
-import com.alibaba.android.arouter.launcher.ARouter;
+import com.alibaba.android.arouter.facade.service.SerializationService;
 import com.xiaochen.common.base.BaseActivity;
+import com.xiaochen.common.sdk.RouterManager;
+import com.xiaochen.common.sdk.RouterPathConstant;
 import com.xiaochen.common.utils.LogUtil;
 import com.xiaochen.common.utils.ToastUtil;
-import com.xiaocheng.common.sdk.PathConstant;
 
 import timber.log.Timber;
 
@@ -24,7 +25,7 @@ import timber.log.Timber;
  * @author zhenglecheng
  * @date 2020/4/17
  */
-@Route(path = PathConstant.AROUTER_ACTIVITY)
+@Route(path = RouterPathConstant.AROUTER_ACTIVITY)
 public class Router1MainActivity extends BaseActivity {
 
     private int requestCode = 100;
@@ -51,60 +52,54 @@ public class Router1MainActivity extends BaseActivity {
     protected void initListener() {
         super.initListener();
         findViewById(R.id.button1).setOnClickListener(v -> {
-            ARouter.getInstance()
-                    .build(PathConstant.TEST_ACTIVITY)
-                    .navigation(this, new NavCallback() {
+            RouterManager.navigation(this, RouterPathConstant.TEST_ACTIVITY, new NavCallback() {
+                @Override
+                public void onFound(Postcard postcard) {
+                    LogUtil.e("MainActivity", "onFound");
+                }
 
-                        @Override
-                        public void onFound(Postcard postcard) {
-                            LogUtil.e("MainActivity", "onFound");
-                        }
+                @Override
+                public void onLost(Postcard postcard) {
+                    LogUtil.e("MainActivity", "onLost");
+                }
 
-                        @Override
-                        public void onLost(Postcard postcard) {
-                            LogUtil.e("MainActivity", "onLost");
-                        }
+                @Override
+                public void onArrival(Postcard postcard) {
+                    LogUtil.e("MainActivity", "onArrival");
+                }
 
-                        @Override
-                        public void onArrival(Postcard postcard) {
-                            LogUtil.e("MainActivity", "onArrival");
-                        }
+                @Override
+                public void onInterrupt(Postcard postcard) {
+                    super.onInterrupt(postcard);
+                    LogUtil.e("MainActivity", "onInterrupt");
+                }
+            });
 
-                        @Override
-                        public void onInterrupt(Postcard postcard) {
-                            super.onInterrupt(postcard);
-                            LogUtil.e("MainActivity", "onInterrupt");
-                        }
-                    });
         });
         findViewById(R.id.button2).setOnClickListener(v -> {
-            ARouter.getInstance()
-                    .build(PathConstant.TEST_ACTIVITY)
-                    .navigation(this, requestCode);
+            RouterManager.navigation(this, RouterPathConstant.TEST_ACTIVITY, requestCode);
         });
         findViewById(R.id.button3).setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putString("work", "高大上的攻城狮");
-            ARouter.getInstance()
-                    .build(PathConstant.TEST_ACTIVITY)
-                    .withInt("age", 27)
-                    .withString("name", "zlc")
-                    .withDouble("money", 20000.0)
-                    .withBundle("bundle", bundle)
-                    .withObject("userInfo", new UserInfo("小城", "男", 27))
-                    .navigation();
+            bundle.putInt("age", 27);
+            bundle.putString("name", "zlc");
+            bundle.putDouble("money", 15000);
+            bundle.putString("userInfo", RouterManager.navigation(SerializationService.class)
+                    .object2Json(new UserInfo("小城", "男", 27)));
+            RouterManager.navigation(RouterPathConstant.TEST_ACTIVITY, bundle);
         });
         findViewById(R.id.button4).setOnClickListener(v -> {
-            ARouter.getInstance()
-                    .build(PathConstant.TEST_ACTIVITY2)
-                    .navigation(this);
+            RouterManager.navigation(RouterPathConstant.TEST_ACTIVITY2);
         });
         findViewById(R.id.button6).setOnClickListener(v -> {
-            Fragment fragment = (Fragment) ARouter.getInstance().build(PathConstant.TEST_FRAGMENT).navigation();
+            Fragment fragment = RouterManager.getFragment(RouterPathConstant.TEST_FRAGMENT);
             LogUtil.e("MainActivity fragment", fragment + "");
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frame, fragment)
-                    .commit();
+            if (fragment != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame, fragment)
+                        .commit();
+            }
         });
     }
 

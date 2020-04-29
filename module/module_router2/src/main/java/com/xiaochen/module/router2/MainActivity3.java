@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.xiaochen.common.base.BaseActivity;
-import com.xiaocheng.common.sdk.PathConstant;
+import com.xiaochen.common.sdk.RouterPathConstant;
 
 /**
  * <p></p >
@@ -16,7 +16,7 @@ import com.xiaocheng.common.sdk.PathConstant;
  * @author zhenglecheng
  * @date 2020/4/17
  */
-@Route(path = PathConstant.TEST_ACTIVITY2)
+@Route(path = RouterPathConstant.TEST_ACTIVITY2)
 public class MainActivity3 extends BaseActivity {
 
     @Override

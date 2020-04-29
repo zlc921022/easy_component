@@ -8,10 +8,10 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.xiaochen.common.base.BaseActivity
 import com.xiaochen.common.utils.LogUtil
 import com.xiaochen.module.mvvm.viewmodel.TestViewModel
-import com.xiaocheng.common.sdk.PathConstant
+import com.xiaochen.common.sdk.RouterPathConstant
 import kotlinx.android.synthetic.main.mvvm_activity_main.*
 
-@Route(path = PathConstant.MVVM_ACTIVITY)
+@Route(path = RouterPathConstant.MVVM_ACTIVITY)
 class MainActivity : BaseActivity() {
 
     private val mViewModel by lazy {

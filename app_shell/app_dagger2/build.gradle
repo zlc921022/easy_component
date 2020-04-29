@@ -4,4 +4,5 @@ dependencies {
     implementation project(':component:common_resource')
     implementation project(':component:common_base')
     runtimeOnly project(':module:module_dagger2')
+    runtimeOnly project(':module:module_widget')
 }

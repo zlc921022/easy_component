@@ -6,8 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.xiaochen.common.utils.LogUtil;
-import com.xiaocheng.common.sdk.PathConstant;
+import com.xiaochen.common.sdk.RouterPathConstant;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,7 +18,7 @@ import androidx.fragment.app.Fragment;
  * @author zhenglecheng
  * @date 2020/4/19
  */
-@Route(path = PathConstant.TEST_FRAGMENT)
+@Route(path = RouterPathConstant.TEST_FRAGMENT)
 public class TestFragment extends Fragment {
     @Nullable
     @Override

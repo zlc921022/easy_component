@@ -16,6 +16,7 @@ dependencies {
     implementation project(':component:common_mvvm')
     implementation project(':component:common_base')
     implementation project(':component:common_sdk')
+    implementation project(':component:common_service')
 
     kapt thirdDependencies.arouterCompiler
 }

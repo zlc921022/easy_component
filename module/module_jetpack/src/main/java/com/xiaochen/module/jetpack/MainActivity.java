@@ -5,11 +5,10 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.xiaochen.common.base.BaseActivity;
-import com.xiaocheng.common.sdk.PathConstant;
+import com.xiaochen.common.sdk.RouterPathConstant;
 
-@Route(path = PathConstant.JETPACK_ACTIVITY)
+@Route(path = RouterPathConstant.JETPACK_ACTIVITY)
 public class MainActivity extends BaseActivity {
 
     @Override

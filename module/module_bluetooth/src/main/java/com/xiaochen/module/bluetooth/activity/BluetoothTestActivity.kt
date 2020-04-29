@@ -11,7 +11,7 @@ import com.xiaochen.common.bluetooth.classicble.ClassicBleManager
 import com.xiaochen.common.utils.LogUtil
 import com.xiaochen.common.utils.ToastUtil
 import com.xiaochen.module.bluetooth.R
-import com.xiaocheng.common.sdk.PathConstant
+import com.xiaochen.common.sdk.RouterPathConstant
 import kotlinx.android.synthetic.main.activity_bluetooth_test.*
 
 
@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_bluetooth_test.*
  * @author     zhenglecheng
  * @date       2020/4/7
  */
-@Route(path = PathConstant.BLUETOOTH_ACTIVITY)
+@Route(path = RouterPathConstant.BLUETOOTH_ACTIVITY)
 class BluetoothTestActivity : BaseActivity(), View.OnClickListener {
 
     private val tag: String = "BluetoothTestActivity"

@@ -7,4 +7,5 @@ dependencies {
     implementation project(':component:common_base')
     implementation project(':component:common_resource')
     implementation project(':component:common_sdk')
+    implementation project(':component:common_service')
 }
