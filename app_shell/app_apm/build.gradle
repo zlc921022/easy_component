@@ -1,0 +1,11 @@
+apply from: "../../common_shell.gradle"
+apply plugin: 'argusapm'
+android{
+    useLibrary('org.apache.http.legacy')
+}
+dependencies {
+    implementation project(':component:common_resource')
+    implementation project(':component:common_base')
+    runtimeOnly project(':module:module_apm')
+}
+

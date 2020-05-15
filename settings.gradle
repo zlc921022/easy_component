@@ -7,6 +7,7 @@ include ':app_shell:app_jetpack'
 include ':app_shell:app_arouter'
 include ':app_shell:app_widget'
 include ':app_shell:app_mvp'
+include ':app_shell:app_apm'
 
 // 通用组件
 include ':component:common_base'
@@ -19,6 +20,9 @@ include ':component:common_bluetooth'
 include ':component:common_mvp'
 include ':component:common_mvvm'
 include ':component:common_service'
+include ':component:common_router:router_annotation'
+include ':component:common_router:router_api'
+include ':component:common_router:router_complier'
 
 // app业务模块
 include ':module:module_aop'
@@ -32,3 +36,4 @@ include ':module:module_router2'
 include ':module:module_app'
 include ':module:module_dagger2'
 include ':app_shell:app_dagger2'
+include ':module:module_apm'

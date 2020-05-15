@@ -10,6 +10,7 @@
     <string name="aop_widget">app-widget</string>
     <string name="aop_mvvm">app-mvvm</string>
     <string name="aop_dagger2">app-dagger2</string>
+    <string name="app_apm">app-apm</string>
 
     <!--模块命名-->
     <string name="module_bluetooth">蓝牙学习</string>
