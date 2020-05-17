@@ -1,8 +1,23 @@
 apply from: "../../common_shell.gradle"
 
+//android{
+//    defaultConfig {
+//        javaCompileOptions {
+//            annotationProcessorOptions {
+//                arguments = [moduleName:project.getName()]
+//            }
+//        }
+//    }
+//}
 dependencies {
     implementation project(":component:common_resource")
     implementation project(":component:common_base")
-    runtimeOnly project(':module:module_router1')
-    runtimeOnly project(':module:module_router2')
+//    runtimeOnly project(':module:module_router1')
+//    runtimeOnly project(':module:module_router2')
+
+//    implementation project(':component:common_router:router_api')
+//    annotationProcessor project(':component:common_router:router_complier')
+
+    runtimeOnly project(':module:module_easy_router1')
+    runtimeOnly project(':module:module_easy_router2')
 }

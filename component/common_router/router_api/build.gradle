@@ -1,6 +1,0 @@
-apply from: "../../../common_component.gradle"
-
-//依赖库
-dependencies {
-    
-}

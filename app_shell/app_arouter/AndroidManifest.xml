@@ -8,8 +8,8 @@
         android:allowBackup="true"
         android:label="@string/app_router"
         android:theme="@style/AppTheme"
-        android:name="com.xiaochen.common.base.BaseApplication">
-        <activity android:name="com.xiaochen.module.router1.Router1MainActivity"
+        android:name="com.xiaochen.module.easy.router1.RouterApplication">
+        <activity android:name="com.xiaochen.module.easy.router1.Router1MainActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme">
 
