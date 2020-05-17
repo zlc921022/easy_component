@@ -6,15 +6,13 @@ import android.util.LruCache;
 import com.xiaochen.easy.core.template.IExtra;
 
 /**
- * Author: 夏胜明
- * Date: 2018/4/25 0025
- * Email: xiasem@163.com
- * Description:
+ * Author: xiaochen
+ * Create Date: 2020/05/16
+ * Email: zlc921022@163.com
  */
-
 public class ExtraManager {
     public static final String SUFFIX_AUTOWIRED = "$$Extra";
-    private static ExtraManager instance;
+    private volatile static ExtraManager instance;
     private LruCache<String, IExtra> classCache;
 
     public static ExtraManager getInstance() {
@@ -36,20 +34,18 @@ public class ExtraManager {
 
     /**
      * 注入
-     *
-     * @param instance
      */
     public void loadExtras(Activity instance) {
         //查找对应activity的缓存
         String className = instance.getClass().getName();
-        IExtra iExtra = classCache.get(className);
+        IExtra extra = classCache.get(className);
         try {
-            if (null == iExtra) {
-                iExtra = (IExtra) Class.forName(instance.getClass().getName() +
+            if (null == extra) {
+                extra = (IExtra) Class.forName(instance.getClass().getName() +
                         SUFFIX_AUTOWIRED).getConstructor().newInstance();
             }
-            iExtra.loadExtra(instance);
-            classCache.put(className, iExtra);
+            extra.loadExtra(instance);
+            classCache.put(className, extra);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -46,17 +46,17 @@ import javax.lang.model.util.Types;
 
 @AutoService(Processor.class)
 /**
-  处理器接收的参数 替代 {@link AbstractProcessor#getSupportedOptions()} 函数
+ 处理器接收的参数 替代 {@link AbstractProcessor#getSupportedOptions()} 函数
  */
-@SupportedOptions(com.xiaochen.easy.compiler.utils.Constant.ARGUMENTS_NAME)
+@SupportedOptions(Constant.ARGUMENTS_NAME)
 /**
  * 指定使用的Java版本 替代 {@link AbstractProcessor#getSupportedSourceVersion()} 函数
  */
-@SupportedSourceVersion(SourceVersion.RELEASE_7)
+@SupportedSourceVersion(SourceVersion.RELEASE_8)
 /**
  * 注册给哪些注解的  替代 {@link AbstractProcessor#getSupportedAnnotationTypes()} 函数
  */
-@SupportedAnnotationTypes(com.xiaochen.easy.compiler.utils.Constant.ANNOTATION_TYPE_ROUTE)
+@SupportedAnnotationTypes(Constant.ANNOTATION_TYPE_ROUTE)
 
 public class RouterProcessor extends AbstractProcessor {
     /**
@@ -85,7 +85,7 @@ public class RouterProcessor extends AbstractProcessor {
 
     private String moduleName;
 
-    private com.xiaochen.easy.compiler.utils.Log log;
+    private Log log;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
@@ -98,44 +98,43 @@ public class RouterProcessor extends AbstractProcessor {
 
         //参数是模块名 为了防止多模块/组件化开发的时候 生成相同的 xx$$ROOT$$文件
         Map<String, String> options = processingEnvironment.getOptions();
-        if (!com.xiaochen.easy.compiler.utils.Utils.isEmpty(options)) {
-            moduleName = options.get(com.xiaochen.easy.compiler.utils.Constant.ARGUMENTS_NAME);
+        if (!Utils.isEmpty(options)) {
+            moduleName = options.get(Constant.ARGUMENTS_NAME);
         }
-        if (com.xiaochen.easy.compiler.utils.Utils.isEmpty(moduleName)) {
+        if (Utils.isEmpty(moduleName)) {
             throw new RuntimeException("Not set processor moudleName option !");
         }
         log.i("init RouterProcessor " + moduleName + " success !");
     }
 
     /**
-     *
-     * @param set 使用了支持处理注解的节点集合
+     * @param set              使用了支持处理注解的节点集合
      * @param roundEnvironment 表示当前或是之前的运行环境,可以通过该对象查找找到的注解。
      * @return true 表示后续处理器不会再处理(已经处理)
      */
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
-        if (!com.xiaochen.easy.compiler.utils.Utils.isEmpty(set)) {
+        if (!Utils.isEmpty(set)) {
             //被Route注解的节点集合
             Set<? extends Element> rootElements = roundEnvironment.getElementsAnnotatedWith(Route.class);
-            if (!com.xiaochen.easy.compiler.utils.Utils.isEmpty(rootElements)) {
-                processorRoute(rootElements);
+            if (!Utils.isEmpty(rootElements)) {
+                processRoute(rootElements);
             }
             return true;
         }
         return false;
     }
 
-    private void processorRoute(Set<? extends Element> rootElements) {
+    private void processRoute(Set<? extends Element> rootElements) {
         //获得Activity这个类的节点信息
-        TypeElement activity = elementUtils.getTypeElement(com.xiaochen.easy.compiler.utils.Constant.ACTIVITY);
-        TypeElement service = elementUtils.getTypeElement(com.xiaochen.easy.compiler.utils.Constant.ISERVICE);
+        TypeElement activity = elementUtils.getTypeElement(Constant.ACTIVITY);
+        TypeElement service = elementUtils.getTypeElement(Constant.ISERVICE);
         for (Element element : rootElements) {
-            RouteMeta routeMeta;
             //类信息
             TypeMirror typeMirror = element.asType();
             log.i("Route class:" + typeMirror.toString());
             Route route = element.getAnnotation(Route.class);
+            RouteMeta routeMeta;
             if (typeUtils.isSubtype(typeMirror, activity.asType())) {
                 routeMeta = new RouteMeta(RouteMeta.Type.ACTIVITY, route, element);
             } else if (typeUtils.isSubtype(typeMirror, service.asType())) {
@@ -145,22 +144,25 @@ public class RouterProcessor extends AbstractProcessor {
             }
             categories(routeMeta);
         }
-        TypeElement iRouteGroup = elementUtils.getTypeElement(com.xiaochen.easy.compiler.utils.Constant.IROUTE_GROUP);
-        TypeElement iRouteRoot = elementUtils.getTypeElement(com.xiaochen.easy.compiler.utils.Constant.IROUTE_ROOT);
+        TypeElement routeGroup = elementUtils.getTypeElement(Constant.IROUTE_GROUP);
+        TypeElement routeRoot = elementUtils.getTypeElement(Constant.IROUTE_ROOT);
 
         //生成Group记录分组表
-        generatedGroup(iRouteGroup);
-
+        generatedGroup(routeGroup);
         //生成Root类 作用：记录<分组，对应的Group类>
-        generatedRoot(iRouteRoot, iRouteGroup);
+        generatedRoot(routeRoot, routeGroup);
     }
 
     /**
      * 生成Root类  作用：记录<分组，对应的Group类>
-     * @param iRouteRoot
-     * @param iRouteGroup
      */
-    private void generatedRoot(TypeElement iRouteRoot, TypeElement iRouteGroup) {
+    private void generatedRoot(TypeElement routeRoot, TypeElement routeGroup) {
+        /**
+         * @Override
+         *   public void loadInto(Map<String, Class<? extends IRouteGroup>> routes) {
+         *     routes.put("router1", EaseRouter$$Group$$router1.class);
+         *   }
+         */
         //创建参数类型 Map<String,Class<? extends IRouteGroup>> routes>
         //Wildcard 通配符
         ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
@@ -168,35 +170,46 @@ public class RouterProcessor extends AbstractProcessor {
                 ClassName.get(String.class),
                 ParameterizedTypeName.get(
                         ClassName.get(Class.class),
-                        WildcardTypeName.subtypeOf(ClassName.get(iRouteGroup))
+                        WildcardTypeName.subtypeOf(ClassName.get(routeGroup))
                 ));
         //参数 Map<String,Class<? extends IRouteGroup>> routes> routes
         ParameterSpec parameter = ParameterSpec.builder(parameterizedTypeName, "routes").build();
         //函数 public void loadInfo(Map<String,Class<? extends IRouteGroup>> routes> routes)
-        MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder(com.xiaochen.easy.compiler.utils.Constant.METHOD_LOAD_INTO)
+        MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder(Constant.METHOD_LOAD_INTO)
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
                 .addParameter(parameter);
         //函数体
         for (Map.Entry<String, String> entry : rootMap.entrySet()) {
-            methodBuilder.addStatement("routes.put($S, $T.class)", entry.getKey(), ClassName.get(com.xiaochen.easy.compiler.utils.Constant.PACKAGE_OF_GENERATE_FILE, entry.getValue()));
+            methodBuilder.addStatement("routes.put($S, $T.class)",
+                    entry.getKey(),
+                    ClassName.get(Constant.PACKAGE_OF_GENERATE_FILE, entry.getValue()));
         }
         //生成$Root$类
-        String className = com.xiaochen.easy.compiler.utils.Constant.NAME_OF_ROOT + moduleName;
+        String className = Constant.NAME_OF_ROOT + moduleName;
         TypeSpec typeSpec = TypeSpec.classBuilder(className)
-                .addSuperinterface(ClassName.get(iRouteRoot))
+                .addSuperinterface(ClassName.get(routeRoot))
                 .addModifiers(Modifier.PUBLIC)
                 .addMethod(methodBuilder.build())
                 .build();
         try {
-            JavaFile.builder(com.xiaochen.easy.compiler.utils.Constant.PACKAGE_OF_GENERATE_FILE, typeSpec).build().writeTo(filerUtils);
-            log.i("Generated RouteRoot：" + com.xiaochen.easy.compiler.utils.Constant.PACKAGE_OF_GENERATE_FILE + "." + className);
+            JavaFile.builder(Constant.PACKAGE_OF_GENERATE_FILE, typeSpec)
+                    .build()
+                    .writeTo(filerUtils);
+            log.i("Generated RouteRoot：" + Constant.PACKAGE_OF_GENERATE_FILE + "." + className);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void generatedGroup(TypeElement iRouteGroup) {
+    private void generatedGroup(TypeElement routeGroup) {
+        /**
+         * @Override
+         *   public void loadInto(Map<String, RouteMeta> atlas) {
+         *     atlas.put("/router1/mainActivity",RouteMeta.build(RouteMeta.Type.ACTIVITY,Router1MainActivity.class,
+         *     "/router1/mainActivity","router1"));
+         *   }
+         */
         //创建参数类型 Map<String, RouteMeta>
         ParameterizedTypeName parameterizedTypeName = ParameterizedTypeName.get(
                 ClassName.get(Map.class),
@@ -205,7 +218,7 @@ public class RouterProcessor extends AbstractProcessor {
         ParameterSpec altas = ParameterSpec.builder(parameterizedTypeName, "atlas").build();
 
         for (Map.Entry<String, List<RouteMeta>> entry : groupMap.entrySet()) {
-            MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder(com.xiaochen.easy.compiler.utils.Constant.METHOD_LOAD_INTO)
+            MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder(Constant.METHOD_LOAD_INTO)
                     .addModifiers(Modifier.PUBLIC)
                     .addAnnotation(Override.class)
                     .addParameter(altas);
@@ -223,9 +236,9 @@ public class RouterProcessor extends AbstractProcessor {
                         routeMeta.getPath(),
                         routeMeta.getGroup());
             }
-            String groupClassName = com.xiaochen.easy.compiler.utils.Constant.NAME_OF_GROUP + groupName;
+            String groupClassName = Constant.NAME_OF_GROUP + groupName;
             TypeSpec typeSpec = TypeSpec.classBuilder(groupClassName)
-                    .addSuperinterface(ClassName.get(iRouteGroup))
+                    .addSuperinterface(ClassName.get(routeGroup))
                     .addModifiers(Modifier.PUBLIC)
                     .addMethod(methodBuilder.build())
                     .build();
@@ -236,20 +249,18 @@ public class RouterProcessor extends AbstractProcessor {
                 e.printStackTrace();
             }
             rootMap.put(groupName, groupClassName);
-
         }
     }
 
     /**
      * 检查是否配置 group 如果没有配置 则从path截取出组名
-     * @param routeMeta
      */
     private void categories(RouteMeta routeMeta) {
         if (routeVerify(routeMeta)) {
             log.i("Group : " + routeMeta.getGroup() + " path=" + routeMeta.getPath());
             //分组与组中的路由信息
             List<RouteMeta> routeMetas = groupMap.get(routeMeta.getGroup());
-            if (com.xiaochen.easy.compiler.utils.Utils.isEmpty(routeMetas)) {
+            if (Utils.isEmpty(routeMetas)) {
                 routeMetas = new ArrayList<>();
                 routeMetas.add(routeMeta);
                 groupMap.put(routeMeta.getGroup(), routeMetas);
@@ -263,6 +274,7 @@ public class RouterProcessor extends AbstractProcessor {
 
     /**
      * 验证path路由地址的合法性
+     *
      * @param routeMeta
      * @return
      */
@@ -274,7 +286,7 @@ public class RouterProcessor extends AbstractProcessor {
             return false;
         }
         //如果group没有设置 我们从path中获得group
-        if (com.xiaochen.easy.compiler.utils.Utils.isEmpty(group)) {
+        if (Utils.isEmpty(group)) {
             String defaultGroup = path.substring(1, path.indexOf("/", 1));
             //截取出的group还是空
             if (Utils.isEmpty(defaultGroup)) {

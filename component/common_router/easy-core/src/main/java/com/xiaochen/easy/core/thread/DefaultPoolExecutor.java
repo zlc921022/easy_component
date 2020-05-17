@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class DefaultPoolExecutor {
 
     public static ThreadPoolExecutor executor;
-    private static final ThreadFactory sThreadFactory = new ThreadFactory() {
+    private static final ThreadFactory THREAD_FACTORY = new ThreadFactory() {
         private final AtomicInteger mCount = new AtomicInteger(1);
 
         @Override
@@ -37,14 +37,11 @@ public class DefaultPoolExecutor {
         corePoolSize = Math.min(corePoolSize, MAX_CORE_POOL_SIZE);
         executor = new ThreadPoolExecutor(corePoolSize,
                 corePoolSize, SURPLUS_THREAD_LIFE, TimeUnit.SECONDS, new
-                ArrayBlockingQueue<Runnable>(64), sThreadFactory);
+                ArrayBlockingQueue<Runnable>(64), THREAD_FACTORY);
         //核心线程也会被销毁
         executor.allowCoreThreadTimeOut(true);
         return executor;
     }
-
-
-
 }
 
 

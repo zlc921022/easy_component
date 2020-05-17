@@ -10,12 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Author: 夏胜明
- * Date: 2018/4/24 0024
- * Email: xiasem@163.com
- * Description:
+ * Author: xiaochen
+ * Create Date: 2020/05/16
+ * Email: zlc921022@163.com
  */
-
 public class Warehouse {
 
     // root 映射表 保存分组信息

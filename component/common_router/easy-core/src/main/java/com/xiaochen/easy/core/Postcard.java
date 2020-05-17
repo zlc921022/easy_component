@@ -14,12 +14,10 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityOptionsCompat;
 
 /**
- * Author: 夏胜明
- * Date: 2018/4/24 0024
- * Email: xiasem@163.com
- * Description:
+ * Author: xiaochen
+ * Create Date: 2020/05/16
+ * Email: zlc921022@163.com
  */
-
 public class Postcard extends RouteMeta {
     private Bundle mBundle;
     private int flags = -1;
@@ -42,11 +40,17 @@ public class Postcard extends RouteMeta {
         this.mBundle = (null == bundle ? new Bundle() : bundle);
     }
 
-    public Bundle getExtras() {return mBundle;}
+    public Bundle getExtras() {
+        return mBundle;
+    }
 
-    public int getEnterAnim() {return enterAnim;}
+    public int getEnterAnim() {
+        return enterAnim;
+    }
 
-    public int getExitAnim() {return exitAnim;}
+    public int getExitAnim() {
+        return exitAnim;
+    }
 
     public IService getService() {
         return service;
@@ -56,10 +60,13 @@ public class Postcard extends RouteMeta {
         this.service = service;
     }
 
+    public Postcard with(Bundle bundle) {
+        this.mBundle = bundle;
+        return this;
+    }
+
     /**
      * Intent.FLAG_ACTIVITY**
-     * @param flag
-     * @return
      */
     public Postcard withFlags(int flag) {
         this.flags = flag;
@@ -72,10 +79,6 @@ public class Postcard extends RouteMeta {
 
     /**
      * 跳转动画
-     *
-     * @param enterAnim
-     * @param exitAnim
-     * @return
      */
     public Postcard withTransition(int enterAnim, int exitAnim) {
         this.enterAnim = enterAnim;
@@ -85,9 +88,6 @@ public class Postcard extends RouteMeta {
 
     /**
      * 转场动画
-     *
-     * @param compat
-     * @return
      */
     public Postcard withOptionsCompat(ActivityOptionsCompat compat) {
         if (null != compat) {
@@ -236,29 +236,23 @@ public class Postcard extends RouteMeta {
     }
 
     public Object navigation() {
-        return EasyRouter.getInstance().navigation(null, this, -1, null);
+        return navigation(null);
     }
 
     public Object navigation(Context context) {
-        return EasyRouter.getInstance().navigation(context, this, -1, null);
+        return navigation(context, null);
     }
 
-
     public Object navigation(Context context, NavigationCallback callback) {
-        return EasyRouter.getInstance().navigation(context, this, -1, callback);
+        return navigation(context, -1, callback);
     }
 
     public Object navigation(Context context, int requestCode) {
-        return EasyRouter.getInstance().navigation(context, this, requestCode, null);
+        return navigation(context, requestCode, null);
     }
 
     public Object navigation(Context context, int requestCode, NavigationCallback callback) {
         return EasyRouter.getInstance().navigation(context, this, requestCode, callback);
     }
 
-
-    public Postcard with(Bundle bundle) {
-        this.mBundle = bundle;
-        return this;
-    }
 }

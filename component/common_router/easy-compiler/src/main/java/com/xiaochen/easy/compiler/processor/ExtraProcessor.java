@@ -8,9 +8,9 @@ import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.xiaochen.easy.annotation.Extra;
 import com.xiaochen.easy.compiler.utils.Constant;
+import com.xiaochen.easy.compiler.utils.LoadExtraBuilder;
 import com.xiaochen.easy.compiler.utils.Log;
 import com.xiaochen.easy.compiler.utils.Utils;
-import com.xiaochen.easy.compiler.utils.LoadExtraBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,10 +41,11 @@ import static javax.lang.model.element.Modifier.PUBLIC;
  * Create Date: 2020/05/16
  * Email: zlc921022@163.com
  */
+
 @AutoService(Processor.class)
-@SupportedOptions(com.xiaochen.easy.compiler.utils.Constant.ARGUMENTS_NAME)
+@SupportedOptions(Constant.ARGUMENTS_NAME)
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
-@SupportedAnnotationTypes({com.xiaochen.easy.compiler.utils.Constant.ANN_TYPE_EXTRA})
+@SupportedAnnotationTypes({Constant.ANN_TYPE_EXTRA})
 public class ExtraProcessor extends AbstractProcessor {
 
     /**
@@ -65,23 +66,23 @@ public class ExtraProcessor extends AbstractProcessor {
      * 记录所有需要注入的属性 key:类节点 value:需要注入的属性节点集合
      */
     private Map<TypeElement, List<Element>> parentAndChild = new HashMap<>();
-    private com.xiaochen.easy.compiler.utils.Log log;
+    private Log log;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
         super.init(processingEnvironment);
         //获得apt的日志输出
         log = Log.newLog(processingEnvironment.getMessager());
-        elementUtils = processingEnv.getElementUtils();
+        elementUtils = processingEnvironment.getElementUtils();
         typeUtils = processingEnvironment.getTypeUtils();
-        filerUtils = processingEnv.getFiler();
+        filerUtils = processingEnvironment.getFiler();
     }
 
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
-        if (!com.xiaochen.easy.compiler.utils.Utils.isEmpty(set)) {
+        if (!Utils.isEmpty(set)) {
             Set<? extends Element> elements = roundEnvironment.getElementsAnnotatedWith(Extra.class);
-            if (!com.xiaochen.easy.compiler.utils.Utils.isEmpty(elements)) {
+            if (!Utils.isEmpty(elements)) {
                 try {
                     categories(elements);
                     generateAutoWired();
@@ -95,22 +96,22 @@ public class ExtraProcessor extends AbstractProcessor {
     }
 
     private void generateAutoWired() throws IOException {
-        TypeMirror typeActivity = elementUtils.getTypeElement(com.xiaochen.easy.compiler.utils.Constant.ACTIVITY).asType();
-        TypeElement iExtra = elementUtils.getTypeElement(com.xiaochen.easy.compiler.utils.Constant.IEXTRA);
+        TypeMirror typeActivity = elementUtils.getTypeElement(Constant.ACTIVITY).asType();
+        TypeElement extra = elementUtils.getTypeElement(Constant.IEXTRA);
 
         if (!Utils.isEmpty(parentAndChild)) {
             // 参数 Object target
             ParameterSpec objectParamSpec = ParameterSpec.builder(TypeName.OBJECT, "target").build();
             for (Map.Entry<TypeElement, List<Element>> entry : parentAndChild.entrySet()) {
-                TypeElement rawClassElement = entry.getKey();
-                if (!typeUtils.isSubtype(rawClassElement.asType(), typeActivity)) {
-                    throw new RuntimeException("just support activity filed: " + rawClassElement);
+                TypeElement classElement = entry.getKey();
+                if (!typeUtils.isSubtype(classElement.asType(), typeActivity)) {
+                    throw new RuntimeException("just support activity filed: " + classElement);
                 }
                 //封装的函数生成类
                 LoadExtraBuilder loadExtra = new LoadExtraBuilder(objectParamSpec);
                 loadExtra.setElementUtils(elementUtils);
                 loadExtra.setTypeUtils(typeUtils);
-                ClassName className = ClassName.get(rawClassElement);
+                ClassName className = ClassName.get(classElement);
                 loadExtra.injectTarget(className);
                 //遍历属性
                 for (int i = 0; i < entry.getValue().size(); i++) {
@@ -119,11 +120,13 @@ public class ExtraProcessor extends AbstractProcessor {
                 }
 
                 // 生成java类名
-                String extraClassName = rawClassElement.getSimpleName() + Constant.NAME_OF_EXTRA;
-                // 生成 XX$$Autowired
+                String extraClassName = classElement.getSimpleName() + Constant.NAME_OF_EXTRA;
+                // 生成 XX$$Extra
+                // public void loadExtra(Object target)
                 JavaFile.builder(className.packageName(), TypeSpec.classBuilder(extraClassName)
-                        .addSuperinterface(ClassName.get(iExtra))
-                        .addModifiers(PUBLIC).addMethod(loadExtra.build()).build())
+                        .addSuperinterface(ClassName.get(extra))
+                        .addModifiers(PUBLIC)
+                        .addMethod(loadExtra.build()).build())
                         .build().writeTo(filerUtils);
                 log.i("Generated Extra: " + className.packageName() + "." + extraClassName);
             }
@@ -132,9 +135,6 @@ public class ExtraProcessor extends AbstractProcessor {
 
     /**
      * 记录需要生成的类与属性
-     *
-     * @param elements
-     * @throws IllegalAccessException
      */
     private void categories(Set<? extends Element> elements) {
         for (Element element : elements) {
@@ -149,6 +149,4 @@ public class ExtraProcessor extends AbstractProcessor {
             }
         }
     }
-
-
 }
