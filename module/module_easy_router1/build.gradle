@@ -21,6 +21,6 @@ dependencies {
     implementation project(':component:common_sdk')
     implementation project(':component:common_utils')
     implementation project(':component:common_service')
-    implementation project(':component:common_router:easy-core')
-    annotationProcessor project(':component:common_router:easy-compiler')
+    implementation project(':easy_router:easy-core')
+    annotationProcessor project(':easy_router:easy-compiler')
 }
