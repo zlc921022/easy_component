@@ -1,4 +1,4 @@
-package com.xiaochen.easy.compiler.utils;
+package com.xiaochen.butterknife.compiler.utils;
 
 import java.util.Collection;
 import java.util.Map;

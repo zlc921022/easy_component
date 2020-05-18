@@ -1,0 +1,10 @@
+apply plugin: 'java-library'
+def supportDependencies = rootProject.ext.supportDependencies
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation supportDependencies.supportAnnotations
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8

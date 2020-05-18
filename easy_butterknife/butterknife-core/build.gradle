@@ -1,0 +1,9 @@
+apply from: "../../common_component.gradle"
+
+def supportDependencies = rootProject.ext.supportDependencies
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation supportDependencies.supportAppcompat
+    api project(':easy_router:easy-annotation')
+}

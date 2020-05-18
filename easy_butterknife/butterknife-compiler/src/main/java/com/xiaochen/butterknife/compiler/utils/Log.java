@@ -1,4 +1,4 @@
-package com.xiaochen.easy.compiler.utils;
+package com.xiaochen.butterknife.compiler.utils;
 
 import javax.annotation.processing.Messager;
 import javax.tools.Diagnostic;

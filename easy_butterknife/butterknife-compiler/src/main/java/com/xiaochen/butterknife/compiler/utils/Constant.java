@@ -1,4 +1,4 @@
-package com.xiaochen.easy.compiler.utils;
+package com.xiaochen.butterknife.compiler.utils;
 
 import com.squareup.javapoet.ClassName;
 
@@ -15,7 +15,7 @@ public class Constant {
     public static final String ISERVICE = "com.xiaochen.easy.core.template.IService";
 
     public static final String ARGUMENTS_NAME = "moduleName";
-    public static final String ANNOTATION_TYPE_ROUTE = "com.xiaochen.easy.annotation.Route";
+    public static final String ANNOTATION_TYPE_BIND_VIEW = "com.xiaochen.butterknife.annotation.BindView";
     public static final String ANN_TYPE_EXTRA = "com.xiaochen.easy.annotation.Extra";
     public static final String ANNOTATION_TYPE_INTERCEPTOR = "com.xiaochen.easy.annotation.Interceptor";
 
