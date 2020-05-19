@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * @date 2020/5/18
  */
 @Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.CLASS)
 public @interface ListenerMethod {
     String name();
 

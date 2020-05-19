@@ -1,11 +1,18 @@
 package com.xiaochen.butterknife.compiler.processor;
 
 import com.google.auto.service.AutoService;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeSpec;
 import com.xiaochen.butterknife.annotation.BindView;
 import com.xiaochen.butterknife.compiler.utils.Constant;
 import com.xiaochen.butterknife.compiler.utils.Log;
 import com.xiaochen.butterknife.compiler.utils.Utils;
 
+import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +26,7 @@ import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
@@ -67,11 +75,17 @@ public class BindViewProcessor extends AbstractProcessor {
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
         super.init(processingEnvironment);
+        System.out.println("BindViewProcessor init");
         //获得apt的日志输出
         log = Log.newLog(processingEnvironment.getMessager());
         elementUtils = processingEnvironment.getElementUtils();
         typeUtils = processingEnvironment.getTypeUtils();
         filerUtils = processingEnvironment.getFiler();
+    }
+
+    @Override
+    public Set<String> getSupportedAnnotationTypes() {
+        return Collections.singleton(BindView.class.getCanonicalName());
     }
 
     /**
@@ -81,6 +95,7 @@ public class BindViewProcessor extends AbstractProcessor {
      */
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
+        System.out.println("BindViewProcessor init");
         if (!Utils.isEmpty(set)) {
             //被BindView注解的节点集合
             Set<? extends Element> rootElements = roundEnvironment.getElementsAnnotatedWith(BindView.class);
@@ -94,18 +109,38 @@ public class BindViewProcessor extends AbstractProcessor {
 
 
     private void processBindViews(Set<? extends Element> rootElements) {
-        TypeElement activity = elementUtils.getTypeElement(Constant.ACTIVITY);
-        Map<String,Class> map = new HashMap<>();
+
         for (Element element : rootElements) {
-            TypeMirror typeMirror = element.asType();
-            TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();
-            if(typeUtils.isSameType(typeMirror,activity.asType())){
-                String key = enclosingElement.getQualifiedName().toString();
-                Class aClass = map.get(key);
-                if(aClass == null){
-                    map.put(key,enclosingElement.getClass());
-                }
+            String packageStr = element.getEnclosingElement().toString();
+            String classStr = element.getSimpleName().toString();
+            ClassName className = ClassName.get(packageStr, classStr + "_ViewBinding");
+
+            System.out.println("packageStr: "+ packageStr);
+            System.out.println("classStr: "+ classStr);
+            System.out.println("className: "+ className);
+            MethodSpec.Builder builder = MethodSpec.constructorBuilder()
+                    .addModifiers(Modifier.PUBLIC)
+                    .addParameter(ClassName.get(packageStr, classStr), "activity");
+
+            for (Element e: element.getEnclosedElements()) {
+                BindView bindView = e.getAnnotation(BindView.class);
+                builder.addStatement("activity.$N = activity.findViewById($L)",
+                        e.getSimpleName(),bindView.value());
+            }
+
+            TypeSpec typeSpec = TypeSpec.classBuilder(className)
+                    .addModifiers(Modifier.PUBLIC)
+                    .addMethod(builder.build())
+                    .build();
+
+            try {
+                JavaFile.builder(packageStr,typeSpec)
+                        .build()
+                        .writeTo(filerUtils);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
+
     }
 }

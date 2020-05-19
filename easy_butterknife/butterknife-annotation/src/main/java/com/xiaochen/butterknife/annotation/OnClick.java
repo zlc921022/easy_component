@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  * @date 2020/5/18
  */
 @Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.CLASS)
 @ListenerClass(
         targetType = "android.view.View",
         setter = "setOnClickListener",

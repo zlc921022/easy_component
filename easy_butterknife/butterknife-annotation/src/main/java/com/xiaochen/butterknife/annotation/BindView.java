@@ -13,8 +13,8 @@ import java.lang.annotation.Target;
  * @author zhenglecheng
  * @date 2020/5/18
  */
-@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
 public @interface BindView {
     @IdRes int value();
 }

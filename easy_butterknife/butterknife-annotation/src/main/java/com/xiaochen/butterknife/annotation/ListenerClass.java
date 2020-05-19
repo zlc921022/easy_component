@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * @date 2020/5/18
  */
 @Target(ElementType.ANNOTATION_TYPE)
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.CLASS)
 public @interface ListenerClass {
 
     String targetType();
