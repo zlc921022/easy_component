@@ -1,7 +1,0 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xiaochen.module.easy.router1">
-
-    <application>
-        <activity android:name=".Router1MainActivity" />
-    </application>
-</manifest>

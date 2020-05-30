@@ -34,14 +34,3 @@ include ':module:module_app'
 include ':module:module_dagger2'
 include ':app_shell:app_dagger2'
 include ':module:module_apm'
-include ':module:module_easy_router1'
-include ':module:module_easy_router2'
-
-// easy_router
-include ':easy_router:easy-annotation'
-include ':easy_router:easy-core'
-include ':easy_router:easy-compiler'
-// easy_butterknife
-include ':easy_butterknife:butterknife-annotation'
-include ':easy_butterknife:butterknife-core'
-include ':easy_butterknife:butterknife-compiler'

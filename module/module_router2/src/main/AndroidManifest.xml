@@ -2,7 +2,7 @@
     package="com.xiaochen.module.router2">
 
     <application>
-        <activity android:name="com.xiaochen.module.easy.router2.MainActivity2" />
+        <activity android:name="com.xiaochen.module.router2.MainActivity2" />
         <activity android:name="com.xiaochen.module.router2.MainActivity3" />
         <activity android:name="com.xiaochen.module.router2.UrlTestActivity" />
         <activity android:name=".UrlSchemeActivity">
