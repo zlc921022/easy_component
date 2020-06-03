@@ -5,9 +5,9 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.xiaochen.common.mvp.AbsBasePresenter;
-import com.xiaochen.module.mvp.view.ITestView;
 import com.xiaochen.module.mvp.api.IServiceApi;
 import com.xiaochen.module.mvp.response.HomeArticleRespVO;
+import com.xiaochen.module.mvp.view.ITestView;
 
 import io.reactivex.Observable;
 
@@ -21,8 +21,8 @@ public class TestPresenter extends AbsBasePresenter<ITestView> {
 
     private final IServiceApi mServiceApi;
 
-    public TestPresenter(@NonNull Context context,ITestView view) {
-        super(context,view);
+    public TestPresenter(@NonNull Context context, ITestView view) {
+        super(context, view);
         mServiceApi = mApiManager.createApi(IServiceApi.class);
     }
 
@@ -32,16 +32,12 @@ public class TestPresenter extends AbsBasePresenter<ITestView> {
 
                     @Override
                     public void onSuccess(HomeArticleRespVO.Data data) {
-                        if (getView() != null) {
-                            getView().setData(data);
-                        }
+                        mViewProxy.setData(data);
                     }
 
                     @Override
                     public void onFailure(String code, String errMessage) {
-                        if (getView() != null) {
-                            getView().onError(errMessage, code);
-                        }
+                        mViewProxy.onError(errMessage, code);
                     }
                 };
         Observable<HomeArticleRespVO> observable = mServiceApi.getHomeArticles(page);

@@ -9,12 +9,14 @@ import com.xiaochen.common.data.BaseResponse;
 import com.xiaochen.common.data.HttpManager;
 
 import java.lang.ref.SoftReference;
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
@@ -32,14 +34,39 @@ public abstract class AbsBasePresenter<T extends IBaseView> extends BasePresente
     protected ApiManager mApiManager;
     private SoftReference<T> mView;
     private LifecycleOwner mLifecycle;
-    private List<Disposable> mDisposables;
+    private CompositeDisposable mDisposables;
     private Retrofit mRetrofit;
+    /**
+     * 子类调用view接口方法，通过这个属性去调，替换getView方法
+     */
+    protected T mViewProxy;
 
     public AbsBasePresenter(@NonNull Context context, @NonNull final T view) {
         this.mContext = context;
         this.mView = new SoftReference<T>(view);
         HttpManager.getManager().setRetrofit(createRetrofit());
         mApiManager = ApiManager.getManager();
+        createViewProxy();
+    }
+
+    /**
+     * 创建View接口的动态代理
+     */
+    private void createViewProxy() {
+        if (mView.get() == null) {
+            return;
+        }
+        Class<? extends IBaseView> aClass = mView.get().getClass();
+        mViewProxy = (T) Proxy.newProxyInstance(aClass.getClassLoader(), aClass.getInterfaces(),
+                new InvocationHandler() {
+                    @Override
+                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                        if (getView() == null) {
+                            return null;
+                        }
+                        return method.invoke(getView(), args);
+                    }
+                });
     }
 
     /**
@@ -69,13 +96,11 @@ public abstract class AbsBasePresenter<T extends IBaseView> extends BasePresente
             mView.clear();
             mView = null;
         }
-        if (mDisposables == null) {
-            return;
+        if (mDisposables != null) {
+            mDisposables.clear();
         }
-        for (Disposable d : mDisposables) {
-            if (!d.isDisposed()) {
-                d.dispose();
-            }
+        if (mViewProxy != null) {
+            mViewProxy = null;
         }
     }
 
@@ -104,7 +129,7 @@ public abstract class AbsBasePresenter<T extends IBaseView> extends BasePresente
             return;
         }
         if (mDisposables == null) {
-            mDisposables = new ArrayList<>();
+            mDisposables = new CompositeDisposable();
         }
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -127,22 +152,22 @@ public abstract class AbsBasePresenter<T extends IBaseView> extends BasePresente
 
         @Override
         public void onStart() {
-            if (getView() != null) {
-                getView().showLoading();
-            }
+            mViewProxy.showLoading();
         }
 
         @Override
-        public abstract void onSuccess(V data);
+        public void onSuccess(V data) {
+            mViewProxy.setData(data);
+        }
 
         @Override
-        public abstract void onFailure(String code, String errMessage);
+        public void onFailure(String code, String errMessage) {
+            mViewProxy.onError(errMessage, code);
+        }
 
         @Override
         public void onEnd() {
-            if (getView() != null) {
-                getView().dismissLoading();
-            }
+            mViewProxy.dismissLoading();
         }
     }
 
